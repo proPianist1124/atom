@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+:root{
+    --background:#232222;
+    --background-lighter:#2c2a2a;
+    --background-lightest:#353232;
+    --text:#fdf4f4;
+    --secondary:#b6b0b0;
+    --success:#4BB543;
+    --danger:#D8524B;
+    --font:"Roboto", sans-serif;
+}
+
+body{
+    margin:20px 30px;
+    background-color:var(--background);
+    color:var(--text);
+    font-family:var(--font);
+}
+
+div.card{
+    margin:auto;
+    max-width:450px;
+    padding:10px 20px;
+}
+
+div.message{
+    background-color:var(--background-lightest);
+    width:100%;
+    padding:10px 5px;
+    margin-bottom:10px;
+}
+div.message span{
+    color:var(--secondary);
+}
+
+input{
+    font-family:var(--font);
+    background:var(--background-lighter);
+    border:none;
+    outline:none;
+    height:30px;
+    color:var(--text);
+}
+input:focus{
+    background-color:var(--background-lightest);
+}
+
+button{
+    font-family:var(--font);
+    background:var(--background-lighter);
+    border:none;
+    height:30px;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+button:hover{
+    background-color:var(--background-lightest);
+    cursor:pointer;
+}
