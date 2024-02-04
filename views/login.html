@@ -9,13 +9,15 @@
     <body>
         <div class = "card" style = "margin-top:50px; text-align:center;">
             <h1>anon</h1>
-            <form action = "/login" method = "POST" autocomplete = "off">
-                <input type = "text" placeholder = "alias" name = "alias" style = "width:100%" required/>
+            <form id = "login" autocomplete = "off" spellcheck = "false">
+                <input type = "text" placeholder = "alias" id = "alias" style = "width:100%" required/>
                 <br><br>
-                <input type = "password" placeholder = "password" name = "password" style = "width:100%" required/>
+                <input type = "password" placeholder = "password" id = "password" style = "width:100%" required/>
                 <br><br>
                 <button type = "submit" style = "width:100%">Sign In</button>
             </form>
+            <p style = "color:var(--danger); margin-top:20px;" id = "error"></p>
         </div>
+        <script src = "/src/login.js"></script>
     </body>
 </html>

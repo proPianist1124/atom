@@ -11,6 +11,16 @@
     --font:"Roboto", sans-serif;
 }
 
+::-webkit-scrollbar {
+    width:10px;
+}
+::-webkit-scrollbar-track {
+    background:var(--background-lighter); 
+}
+::-webkit-scrollbar-thumb {
+    background:var(--background-lightest); 
+}
+
 body{
     margin:20px 30px;
     background-color:var(--background);
@@ -26,7 +36,7 @@ div.card{
 
 div.message{
     background-color:var(--background-lightest);
-    width:100%;
+    max-width:100%;
     padding:10px 5px;
     margin-bottom:10px;
 }
@@ -36,6 +46,7 @@ div.message span{
 
 input{
     font-family:var(--font);
+    font-size:16px;
     background:var(--background-lighter);
     border:none;
     outline:none;
@@ -48,6 +59,7 @@ input:focus{
 
 button{
     font-family:var(--font);
+    font-size:16px;
     background:var(--background-lighter);
     border:none;
     height:30px;
@@ -59,4 +71,7 @@ button{
 button:hover{
     background-color:var(--background-lightest);
     cursor:pointer;
+}
+button.danger{
+    background-color:var(--danger);
 }
