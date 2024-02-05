@@ -15,8 +15,13 @@ function getCookie(cname) {
     }
     return ""
 }
-        
+
 const socket = io()
+const user = JSON.parse(getCookie("session"))
+
+document.getElementById("message").addEventListener("keydown", (event) => {
+    socket.emit("typing", user.alias)
+})
 
 socket.on("msg", (msg) => {
     const div = document.createElement("div")
@@ -32,17 +37,13 @@ socket.on("msg", (msg) => {
     document.getElementById("feed").scrollTop = document.getElementById("feed").scrollHeight
 })
 
-socket.on("user-connection", (arg) => {
-    const p = document.createElement("p")
-    p.innerHTML = `<span style = "color:var(--${arg == "a user has connected" ? "success" : "danger"})">${arg}</span>`
-    document.getElementById("feed").appendChild(p)
+socket.on("typing", (typer) => {
+    document.getElementById("typer").innerText = typer
 })
 
 document.getElementById("send").addEventListener("click", send_message)
 
 function send_message(){
-    const user = JSON.parse(getCookie("session"))
-
     if(document.getElementById("message").value == ""){
         document.getElementById("error").innerText = "Please write a message first!"
     }else if(getCookie("session") == ""){

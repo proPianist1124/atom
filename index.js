@@ -94,6 +94,9 @@ io.on("connection", (socket) => {
     
     io.emit("msg", `${user[0].alias}&&${msg.split("&&")[1]}`)
   })
+  socket.on("typing", async (typer) => {
+    io.emit("typing", `${typer} is typing...`)
+  })
 })
 
 app.use((req, res, next) => {

@@ -16,7 +16,7 @@ document.body.addEventListener("keyup", function(e) {
             window.location.href = "http://gg.gg/18uvk3"
         }
     }
-    if(key.escape == "Enter"){
+    if(e.key == "Escape"){
         document.cookie = "session=; Max-Age=-99999999;"
     }
 })
