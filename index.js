@@ -68,8 +68,8 @@ app.post("/signup", limiter, async (req, res) => {
     res.json({ error:"Alias is too short - minimum is 4 characters" })
   }else{
     if(user.length === 0){
-      await db.from("anon_users").insert({ alias:req.body.alias, password:sha256(req.body.password) })
-      const { data:created_user } = await db.from("anon_users").select().eq("alias", req.body.alias)
+      await db.from("anon_users").insert({ alias:req.body.alias.toLowerCase(), password:sha256(req.body.password) })
+      const { data:created_user } = await db.from("anon_users").select().eq("alias", req.body.alias.toLowerCase())
       res.json({ id:created_user[0].id, alias:created_user[0].alias })
     }else{
       res.json({ error:"Alias is already in use" })
