@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang = "en">
     <head>
-        <title>Login to Anon</title>
+        <title>Signup to Anon</title>
         <meta name = "viewport" content = "width=device-width, initial-scale=1.0"/>
         <link rel = "stylesheet" href = "/style.css" type = "text/css"/>
         <link rel = "icon" type = "image/x-icon" href = "/favicon.ico"/>
@@ -10,16 +10,16 @@
         <div class = "card" style = "margin-top:50px; text-align:center;">
             <h1>anon</h1>
             <form id = "login" autocomplete = "off" spellcheck = "false">
-                <input value = "login" id = "type" type = "hidden"/>
+                <input value = "signup" id = "type" type = "hidden"/>
                 <input type = "text" placeholder = "alias" id = "alias" style = "width:100%" required/>
                 <br><br>
                 <input type = "password" placeholder = "password" id = "password" style = "width:100%" required/>
                 <br><br>
-                <button type = "submit" style = "width:100%">Login</button>
+                <button type = "submit" style = "width:100%">Sign Up</button>
                 <p style = "color:var(--danger)" id = "error"></p>
             </form>
             <p>
-                No account? <a href = "/signup" style = "color:var(--secondary); font-style:italic;">Sign Up</a>
+                Own an account? <a href = "/" style = "color:var(--secondary); font-style:italic;">Login</a>
             </p>
         </div>
         <script src = "/src/auth.js"></script>

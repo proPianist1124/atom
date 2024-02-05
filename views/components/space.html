@@ -1,0 +1,11 @@
+<div id = "feed" class = "card" style = "height:200px; overflow:auto; margin-bottom:30px; background-color:var(--background-lighter);"></div>
+<p style = "color:var(--danger)" id = "error"></p>
+<div style = "display:flex; align-items:center; justify-content:center;">
+    <input id = "message" placeholder = "your message…" style = "width:100%; margin-right:10px;" autocomplete = "off"/>
+    <button id = "send">
+        Send&nbsp;&nbsp;
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 3 3 9-3 9 19-9Z"/><path d="M6 12h16"/></svg>
+    </button>
+</div>
+<p style = "color:var(--success)" id = "status">• Secure Connection</p>
+<script src = "/src/send.js" type = "module"></script>

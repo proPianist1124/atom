@@ -1,7 +1,7 @@
 document.getElementById("login").addEventListener("submit",submit)
 async function submit(e){
     e.preventDefault()
-    const res = await fetch("/login", {
+    const res = await fetch(`/${document.getElementById("type").value}`, {
         headers:{
             "Content-Type":"application/json"
         },
@@ -16,16 +16,16 @@ async function submit(e){
             if(minutes) {
                 var date = new Date()
                 date.setTime(date.getTime()+(minutes*60*1000))
-                var expires = "; expires="+date.toGMTString()
+                var expires = `expires=${date.toGMTString()}`
             }else{
                 var expires = ""
             }
-            document.cookie = name+"="+value+expires+"; path=/"
+            document.cookie = `${name}=${value}; ${expires}; path=/`
         }
 
         createCookie("session", JSON.stringify(data), 10)
 
         document.getElementById("error").innerText = ""
-        window.location.reload()
+        window.location.href = "/"
     }
 }
