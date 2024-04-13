@@ -1,4 +1,4 @@
-import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js"
+import { io } from "/src/socket-io.js"
 
 function getCookie(cname) {
     let name = `${cname}=`
@@ -19,38 +19,35 @@ function getCookie(cname) {
 const socket = io()
 const user = JSON.parse(getCookie("session"))
 
-document.getElementById("message").addEventListener("keydown", (event) => {
-    socket.emit("typing", user.alias)
-})
-
+// listen for messages from the server
 socket.on("msg", (msg) => {
     const div = document.createElement("div")
     div.setAttribute("class", "message")
     
     const span = document.createElement("span")
-    span.innerText = msg.split("&&")[1]
+    span.innerText = msg.text
 
-    div.innerText = `${msg.split("&&")[0]}: `
+    div.innerText = `${msg.author}: `
     div.appendChild(span)
 
     document.getElementById("feed").appendChild(div)
     document.getElementById("feed").scrollTop = document.getElementById("feed").scrollHeight
 })
 
-socket.on("typing", (typer) => {
-    document.getElementById("typer").innerText = typer
-})
-
+// send a message to the server
 document.getElementById("send").addEventListener("click", send_message)
 
-function send_message(){
+function send_message() {
     if(document.getElementById("message").value == ""){
         document.getElementById("error").innerText = "Please write a message first!"
     }else if(getCookie("session") == ""){
         window.location.href = "/"
     }else{
         document.getElementById("error").innerText = ""
-        socket.emit("msg", `${user.id}&&${document.getElementById("message").value}`)
+        //socket.emit("msg", `${user.id}&&${document.getElementById("message").value}`)
+
+        socket.emit("msg", { author: user.id, text: document.getElementById("message").value })
+
         document.getElementById("message").value = ""
     }
 }

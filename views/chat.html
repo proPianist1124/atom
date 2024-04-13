@@ -1,15 +1,28 @@
 <!DOCTYPE html>
 <html lang = "en">
     <head>
-        <title>Anon</title>
+        <title>atomchat</title>
         <%- include("./components/meta.html"); %>
     </head>
     <body>
-        <div class = "card" style = "background-color:var(--background)">
+        <div class = "card" style = "background-color: var(--background);">
             <%- include("./components/header.html"); %>
-            <h3 style = "margin-top:40px">Lobby</h3>
+            <h3 style = "margin-top: 40px;">Lobby</h3>
             <%- include("./components/space.html"); %>
-            <%- include("./components/config.html"); %>
         </div>
+        <script>
+            document.body.addEventListener("keyup", function(e) {
+                if (localStorage.getItem("escape") && localStorage.getItem("escape") != "") {
+                    if (e.key == "Escape") {
+                        window.location.href = localStorage.getItem("escape")
+                    }
+                } else if(e.key == "Escape") {
+                    window.location.href = "http://gg.gg/18uvk3"
+                }
+                if (e.key == "Escape") {
+                    document.cookie = "session=; Max-Age=-99999999;"
+                }
+            })
+        </script>
     </body>
 </html>

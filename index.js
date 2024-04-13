@@ -3,25 +3,20 @@ const app = express()
 const { Server } = require("socket.io")
 const cookieParser = require("cookie-parser")
 const bp = require("body-parser")
-const { createClient } = require("@supabase/supabase-js")
 const ejs = require("ejs")
 const sha256 = require("js-sha256")
 const { rateLimit } = require("express-rate-limit")
+const { v4: uuidv4 } = require("uuid")
+const postgres = require("postgres")
 require("dotenv").config()
 
 const expressServer = app.listen(2000, () => {
   console.log("Listening on *:2000")
 })
+
 const io = new Server(expressServer)
 
-const limiter = rateLimit({
-	windowMs:180 * 60 * 1000, // 10 minutes
-	limit:1,
-	standardHeaders:"draft-7",
-	legacyHeaders:false, // Disable the `X-RateLimit-*` headers.
-  message:"Please wait three hours before creating a new account!"
-})
-
+// add helmet here later for security
 app.engine("html", ejs.renderFile)
 app.set("view engine", "html")
 app.use(express.static("static"))
@@ -29,30 +24,34 @@ app.use(cookieParser())
 app.use(bp.json())
 app.use(bp.urlencoded({ extended:true }))
 
-const db = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON)
+const db = postgres({
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  username: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  port: 5432,
+  ssl: "require",
+  connection: {
+    options: `project=${process.env.ENDPOINT_ID}`,
+  }
+})
 
 app.get("/", async (req, res) => {
-  if(!req.cookies.session){
+  if (!req.cookies.session) {
     res.render("login")
-  }else{
-    try{
+  } else {
+    try {
       const session = JSON.parse(req.cookies.session)
-      const { data:user } = await db.from("anon_users").select().eq("id", session.id)
-      if(user == null || user.length === 0){
+      const user = await db`SELECT * FROM atomchat_users WHERE id = ${session.id}`
+
+      if (user == null || user.length === 0){
         res.render("login")
-      }else{
-        if(req.query.room != undefined){
-          res.render("room", {
-            id:req.query.room,
-            username:session.alias
-          })
-        }else{
-          res.render("chat", {
-            username:session.alias
-          })
-        }
+      } else {
+        res.render("chat", {
+          username: session.alias
+        })
       }
-    }catch(e){
+    } catch(e) {
       res.render("login")
     }
   }
@@ -62,40 +61,50 @@ app.get("/signup", async (req, res) => {
   res.render("signup")
 })
 
-app.post("/signup", limiter, async (req, res) => {
-  const { data:user } = await db.from("anon_users").select().eq("alias", req.body.alias)
-  if(req.body.alias.length < 4){
-    res.json({ error:"Alias is too short - minimum is 4 characters" })
-  }else{
-    if(user.length === 0){
-      await db.from("anon_users").insert({ alias:req.body.alias.toLowerCase(), password:sha256(req.body.password) })
-      const { data:created_user } = await db.from("anon_users").select().eq("alias", req.body.alias.toLowerCase())
-      res.json({ id:created_user[0].id, alias:created_user[0].alias })
-    }else{
-      res.json({ error:"Alias is already in use" })
-    }
+const signup_ratelimit = rateLimit({
+	windowMs: 180 * 60 * 1000, // 10 minutes
+	limit: 1,
+	standardHeaders: "draft-7",
+	legacyHeaders: false,
+  message: "Please wait three hours before creating a new account!"
+})
+
+app.post("/signup", signup_ratelimit, async (req, res) => {
+  const user = await db`SELECT * FROM atomchat_users WHERE alias = ${req.body.alias.toLowerCase()}`
+
+  if (req.body.alias.length < 4) {
+    res.json({ error: "Alias is too short - minimum is 4 characters" })
+  } else if (user == null || user.length === 0) {
+    const today = new Date()
+
+    await db`INSERT INTO atomchat_users VALUES (${uuidv4()}, ${`${String(today.getMonth() + 1).padStart(2, "0")} - ${String(today.getDate()).padStart(2, '0')}-${today.getFullYear()}`}, ${req.body.alias.toLowerCase()}, ${sha256(req.body.password)})`
+
+    const created_user = await db`SELECT * FROM atomchat_users WHERE alias = ${req.body.alias.toLowerCase()}`
+    res.json({ id: created_user[0].id, alias: created_user[0].alias })
+  } else {
+    res.json({ error: "Alias is already in use" })
   }
 })
 
 app.post("/login", async (req, res) => {
-  const { data:user } = await db.from("anon_users").select().eq("alias", req.body.alias)
-  if(user == null || user.length === 0){
-    res.json({ error:"User not found" })
-  }else if(user[0].password !== sha256(req.body.password)){
-    res.json({ error:"Incorrect password" })
-  }else{
-    res.json({ id:user[0].id, alias:user[0].alias })
+  const user = await db`SELECT * FROM atomchat_users WHERE alias = ${req.body.alias.toLowerCase()}`
+
+  if (user == null || user.length === 0) {
+    res.json({ error: "User not found" })
+  } else if(user[0].password !== sha256(req.body.password)) {
+    res.json({ error: "Incorrect password" })
+  } else {
+    res.json({ id: user[0].id, alias: user[0].alias })
   }
 })
 
 io.on("connection", (socket) => {
   socket.on("msg", async (msg) => {
-    const { data:user } = await db.from("anon_users").select().eq("id", msg.split("&&")[0])
-    
-    io.emit("msg", `${user[0].alias}&&${msg.split("&&")[1]}`)
-  })
-  socket.on("typing", async (typer) => {
-    io.emit("typing", `${typer} is typing...`)
+    const user = await db`SELECT * FROM atomchat_users WHERE id = ${msg.author}`
+
+    if (user != null || user.length !== 0) {
+      io.emit("msg", { author: user[0].alias, text: msg.text })
+    }
   })
 })
 

@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang = "en">
     <head>
-        <title>Signup to Anon</title>
+        <title>signup | atomchat</title>
         <meta name = "viewport" content = "width=device-width, initial-scale=1.0"/>
         <link rel = "stylesheet" href = "/style.css" type = "text/css"/>
         <link rel = "icon" type = "image/x-icon" href = "/favicon.ico"/>
     </head>
     <body>
-        <div class = "card" style = "margin-top:50px; text-align:center;">
-            <h1>anon</h1>
+        <div class = "card" style = "margin-top: 50px; text-align: center;">
+            <h1>atomchat</h1>
             <form id = "login" autocomplete = "off" spellcheck = "false">
                 <input value = "signup" id = "type" type = "hidden"/>
-                <input type = "text" placeholder = "alias" id = "alias" style = "width:100%" required/>
+                <input type = "text" placeholder = "alias" id = "alias" style = "width: 100%;" required/>
                 <br><br>
-                <input type = "password" placeholder = "password" id = "password" style = "width:100%" required/>
+                <input type = "password" placeholder = "password" id = "password" style = "width: 100%;" required/>
                 <br><br>
-                <button type = "submit" style = "width:100%">Sign Up</button>
-                <p style = "color:var(--danger)" id = "error"></p>
+                <button type = "submit" style = "width: 100%;">Sign Up</button>
+                <p style = "color: var(--danger);" id = "error"></p>
             </form>
             <p>
-                Own an account? <a href = "/" style = "color:var(--secondary); font-style:italic;">Login</a>
+                Own an account? <a href = "/" style = "color: var(--secondary); font-style: italic;">Login</a>
             </p>
         </div>
         <script src = "/src/auth.js"></script>

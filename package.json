@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "clear; node index.js;"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,8 @@
     "express-rate-limit": "^7.1.5",
     "js-sha256": "^0.11.0",
     "node-fetch": "^3.2.6",
-    "socket.io": "^4.7.4"
+    "postgres": "^3.4.4",
+    "socket.io": "^4.7.4",
+    "uuid": "^9.0.1"
   }
 }
