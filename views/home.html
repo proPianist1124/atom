@@ -7,6 +7,7 @@
     <body>
         <div id = "servers" class = "card" style = "background-color: var(--background);">
             <%- include("./components/header.html"); %>
+            <%- include("./components/profile.html"); %>
             <p style = "color: var(--secondary);">My Servers:</p>
         </div>
         <div class = "card" style = "background-color: var(--background);">
@@ -39,7 +40,7 @@
                 a.setAttribute("href", `/server/${server.id}`)
 
                 const div = document.createElement("div")
-                div.setAttribute("class", "message")
+                div.setAttribute("class", "card-secondary")
                 div.innerText = server.name
                 a.appendChild(div)
 
@@ -50,6 +51,6 @@
                 document.querySelector("dialog").showModal()
             })
         </script>
-        <script src = "/src/exit.js"></script>
+        <script src = "/src/misc/exit.js"></script>
     </body>
 </html>

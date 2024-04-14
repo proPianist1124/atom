@@ -7,6 +7,7 @@
     <body>
         <div class = "card" style = "background-color: var(--background);">
             <%- include("./components/header.html"); %>
+            <%- include("./components/profile.html"); %>
             <p style = "display: flex; align-items: center; color: var(--secondary);">
                 Server:&nbsp;<u><%- name %></u>
                 <span style = "color: var(--success); margin-left: auto;" id = "status">• Secure Connection</span>
@@ -25,7 +26,7 @@
                 </button>
             </div>
         </div>
-        <script src = "/src/send.js" type = "module"></script>
-        <script src = "/src/exit.js"></script>
+        <script src = "/src/misc/send-message.js" type = "module"></script>
+        <script src = "/src/misc/exit.js"></script>
     </body>
 </html>

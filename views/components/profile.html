@@ -1,0 +1,10 @@
+<div style = "display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+    <p><%- username %></p>
+    <button id = "logout" class = "danger" style = "margin-left: auto;">Logout</button>
+</div>
+<script>
+    document.getElementById("logout").addEventListener("click", () => {
+        document.cookie = "session=; Max-Age=-99999999;"
+        window.location.href = "/"
+    })
+</script>

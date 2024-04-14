@@ -22,7 +22,7 @@ const user = JSON.parse(getCookie("session"))
 // listen for messages from the server
 socket.on(`msg_${document.getElementById("id").value}`, (msg) => {
     const div = document.createElement("div")
-    div.setAttribute("class", "message")
+    div.setAttribute("class", "card-secondary")
     
     const span = document.createElement("span")
     span.innerText = msg.text
