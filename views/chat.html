@@ -5,14 +5,14 @@
         <%- include("./components/meta.html"); %>
     </head>
     <body>
-        <div class = "card" style = "background-color: var(--background);">
+        <div class = "card">
             <%- include("./components/header.html"); %>
             <%- include("./components/profile.html"); %>
             <p style = "display: flex; align-items: center; color: var(--secondary);">
                 Server:&nbsp;<u><%- name %></u>
                 <span style = "color: var(--success); margin-left: auto;" id = "status">• Secure Connection</span>
             </p>
-            <div id = "feed" class = "card" style = "height: 50vh; overflow: auto; margin-bottom: 30px; background-color: var(--background-lighter); border: 3px solid var(--background-lightest);"></div>
+            <div id = "feed" class = "card" style = "height: 50vh; overflow: auto; margin-bottom: 30px; border: 3px solid var(--background-lightest);"></div>
             <p style = "color: var(--danger);" id = "error"></p>
             <div style = "display: flex; align-items: center; justify-content: center;">
                 <input id = "message" placeholder = "your message" autocomplete = "off" style = "width: 100%; margin-right: 10px;" />
@@ -26,7 +26,7 @@
                 </button>
             </div>
         </div>
-        <script src = "/src/misc/send-message.js" type = "module"></script>
+        <script src = "/src/actions/send-message.js" type = "module"></script>
         <script src = "/src/misc/exit.js"></script>
     </body>
 </html>

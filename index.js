@@ -29,7 +29,7 @@ app.use(async (req, res, next) => {
   if (req.url != "/" && req.url.startsWith("/api/") == false) {
     try {
       const session = JSON.parse(req.cookies.session)
-      const user = await db`SELECT * FROM atomchat_users WHERE id = ${session.id}`
+      const user = await db`SELECT * FROM atomchat_users WHERE id = ${session.id};`
       
       if (user == null || user.length === 0) {
         res.redirect("/")
@@ -64,11 +64,11 @@ app.get("/", async (req, res) => {
 app.get("/home", async (req, res) => {
   const session = JSON.parse(req.cookies.session)
 
-  const servers = await db`SELECT * FROM atomchat_servers WHERE owner = ${session.id}`
+  const servers = await db`SELECT * FROM atomchat_servers WHERE owner = ${session.id};`
 
   res.render("home", {
     username: session.alias,
-    servers: JSON.stringify(servers)
+    servers: JSON.stringify(servers.reverse())
   })
 })
 
@@ -76,15 +76,15 @@ app.get("/server/:id", async (req, res) => {
   const session = JSON.parse(req.cookies.session)
   
   try {
-    const server = await db`SELECT * FROM atomchat_servers WHERE id = ${req.params.id}`
+    const server = await db`SELECT * FROM atomchat_servers WHERE id = ${req.params.id};`
 
     if (server == null || server.length === 0) {
       res.status(404).render("404")
     } else {
       res.render("chat", {
-        name: "test",
-        username: session.alias,
-        id: req.params.id
+        id: server[0].id,
+        name: server[0].name,
+        username: session.alias
       })
     }
   } catch (e) {
@@ -103,16 +103,16 @@ const signup_ratelimit = rateLimit({
 })
 
 app.post("/api/signup", signup_ratelimit, async (req, res) => {
-  const user = await db`SELECT * FROM atomchat_users WHERE alias = ${req.body.alias.toLowerCase()}`
+  const user = await db`SELECT * FROM atomchat_users WHERE alias = ${req.body.alias.toLowerCase()};`
 
   if (req.body.alias.length < 4) {
-    res.json({ error: "Alias is too short - minimum is 4 characters" })
+    res.json({ error: "Alias is too short - minimum is 4 characters." })
   } else if (user == null || user.length === 0) {
     const today = new Date()
 
-    await db`INSERT INTO atomchat_users VALUES (${uuidv4()}, ${`${String(today.getMonth() + 1).padStart(2, "0")} - ${String(today.getDate()).padStart(2, '0')}-${today.getFullYear()}`}, ${req.body.alias.toLowerCase()}, ${sha256(req.body.password)})`
+    await db`INSERT INTO atomchat_users VALUES (${uuidv4()}, ${`${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}-${today.getFullYear()}`}, ${req.body.alias.toLowerCase()}, ${sha256(req.body.password)});`
 
-    const created_user = await db`SELECT * FROM atomchat_users WHERE alias = ${req.body.alias.toLowerCase()}`
+    const created_user = await db`SELECT * FROM atomchat_users WHERE alias = ${req.body.alias.toLowerCase()};`
     res.json({ id: created_user[0].id, alias: created_user[0].alias })
   } else {
     res.json({ error: "Alias is already in use" })
@@ -121,23 +121,59 @@ app.post("/api/signup", signup_ratelimit, async (req, res) => {
 
 // logging in
 app.post("/api/login", async (req, res) => {
-  const user = await db`SELECT * FROM atomchat_users WHERE alias = ${req.body.alias.toLowerCase()}`
-
-  if (user == null || user.length === 0) {
-    res.json({ error: "User not found" })
-  } else if(user[0].password !== sha256(req.body.password)) {
-    res.json({ error: "Incorrect password" })
+  if (req.body.alias == "" || req.body.password == "") {
+    res.json({ error: "Please fill out all fields" })
   } else {
-    res.json({ id: user[0].id, alias: user[0].alias })
+    const user = await db`SELECT * FROM atomchat_users WHERE alias = ${req.body.alias.toLowerCase()};`
+
+    if (user == null || user.length === 0) {
+      res.json({ error: "User not found" })
+    } else if(user[0].password !== sha256(req.body.password)) {
+      res.json({ error: "Incorrect password" })
+    } else {
+      res.json({ id: user[0].id, alias: user[0].alias })
+    }
   }
+})
+
+// creating a server
+app.post("/api/create-server", async (req, res) => {
+  try {
+    if (req.body.name.length < 4) {
+      res.json({ error: "Server name is too short - minimum is 4 characters" })
+    } else if (req.body.name > 20) {
+      res.json({ error: "Server name is too long - maximum is 20 characters" })
+    } else {
+      const session = JSON.parse(req.cookies.session)
+
+      const today = new Date()
+
+      await db`INSERT INTO atomchat_servers VALUES (${uuidv4()}, ${`${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}-${today.getFullYear()}`}, ${req.body.name}, '[]', '[]', ${session.id});`
+
+      res.json({ success: true })
+    }
+  } catch (e) {
+    res.json({ error: e.message })
+  }
+})
+
+// deleting a server
+app.post("/api/delete-server", async (req, res) => {
+
 })
 
 io.on("connection", (socket) => {
   socket.on("msg", async (msg) => {
-    const user = await db`SELECT * FROM atomchat_users WHERE id = ${msg.author}`
+    const user = await db`SELECT * FROM atomchat_users WHERE id = ${msg.author};`
 
     if (user != null || user.length !== 0) {
       io.emit(`msg_${msg.server}`, { author: user[0].alias, text: msg.text })
+
+      const server = await db`SELECT messages FROM atomchat_servers WHERE id = ${msg.server};`
+
+      server[0].messages.push({ author: user[0].alias, text: msg.text })
+      
+      //console.log(server[0].messages)
     }
   })
 })

@@ -26,6 +26,8 @@
 body {
     margin: 20px 30px;
     background-color: var(--background);
+    background-image:  linear-gradient(var(--background-lightest) 1px, transparent 1px), linear-gradient(to right, var(--background-lightest) 1px, var(--background) 1px);
+    background-size: 20px 20px;
     color: var(--color);
     font-family: var(--font);
 }
@@ -37,22 +39,22 @@ input {
     background: var(--background-lighter);
     border: 3px solid var(--background-lightest);
     outline: none;
-    height: 35px;
+    height: 40px;
     color: var(--color);
     padding: 0px 8px;
     border-radius: var(--border-radius);
     transition: 0.2s;
 }
 input:focus {
-    background-color: var(--background);
+    background: none;
 }
 
 button {
+    background: var(--background-lighter);
     font-family: var(--font);
     font-size: 16px;
-    background: var(--background-lighter);
     border: 3px solid var(--background-lightest);
-    height: 35px;
+    height: 40px;
     color: var(--secondary);
     display: flex;
     align-items: center;
@@ -62,7 +64,7 @@ button {
 }
 button:hover {
     cursor: pointer;
-    background-color: var(--background);
+    background: none;
 }
 button.danger {
     color: #fff;
@@ -82,7 +84,8 @@ a:hover {
 }
 
 dialog {
-    background-color: var(--background);
+    background: none;
+    backdrop-filter: blur(5px);
     color: var(--color);
     border: 3px solid var(--background-lightest);
     border-radius: var(--border-radius);
@@ -94,21 +97,36 @@ dialog {
     opacity: 0.5;
 }
 
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    backdrop-filter: blur(2px);
+    padding: 5px;
+    color: var(--secondary);
+    text-align: center;
+}
+
 div.card {
     margin: auto;
     max-width: 450px;
     padding: 10px 20px;
+    backdrop-filter: blur(2px);
     border-radius: var(--border-radius);
 }
 
 div.card-secondary {
-    background-color: var(--background);
     max-width: 100%;
     padding: 10px;
     margin-bottom: 10px;
     border: 3px solid var(--background-lightest);
     border-radius: var(--border-radius);
+    transition: 0.2s;
 }
 div.card-secondary span {
     color: var(--secondary);
+}
+div.card-secondary:hover {
+    border-color: var(--background-lighter);
 }

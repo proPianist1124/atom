@@ -1,8 +1,8 @@
-document.getElementById("login").addEventListener("submit",submit)
-async function submit(e){
-    document.getElementById("auth-button").innerText = document.getElementById("type").value == "login" ? "Logging in..." : "Signing up..."
+document.getElementById("login").addEventListener("submit", submit)
 
+async function submit(e){
     e.preventDefault()
+
     let res = await fetch(`/api/${document.getElementById("type").value}`, {
         headers: {
             "Content-Type":"application/json"
@@ -15,6 +15,8 @@ async function submit(e){
     if (res.error) {
         document.getElementById("error").innerText = res.error
     } else {
+        document.getElementById("auth-button").innerText = document.getElementById("type").value == "login" ? "Logging in..." : "Signing up..."
+        
         function createCookie(name, value, minutes) {
             if (minutes) {
                 let date = new Date()

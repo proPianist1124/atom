@@ -1,4 +1,4 @@
-import { io } from "/src/socket-io.js"
+import { io } from "/src/misc/socket-io.js"
 
 function getCookie(cname) {
     let name = `${cname}=`

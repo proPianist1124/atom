@@ -9,9 +9,9 @@
             <%- include("./components/header.html"); %>
             <form id = "login" autocomplete = "off" spellcheck = "false">
                 <input value = "login" id = "type" type = "hidden" />
-                <input type = "text" placeholder = "alias" id = "alias" style = "width: 100%;" required />
+                <input type = "text" placeholder = "alias" id = "alias" style = "width: 100%;" />
                 <br><br>
-                <input type = "password" placeholder = "password" id = "password" style = "width: 100%;" required />
+                <input type = "password" placeholder = "password" id = "password" style = "width: 100%;" />
                 <br><br>
                 <button type = "submit" id = "auth-button" style = "width: 100%;">
                     Login
@@ -22,6 +22,9 @@
                 No account? <a href = "?page=signup">Sign Up</a>
             </p>
         </div>
+        <footer>
+            Switzerland Based
+        </footer>
         <script src = "/src/auth.js"></script>
         <script src = "/src/misc/exit.js"></script>
     </body>
