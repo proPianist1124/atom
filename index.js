@@ -10,11 +10,11 @@ const { v4: uuidv4 } = require("uuid")
 const postgres = require("postgres")
 require("dotenv").config()
 
-const expressServer = app.listen(2000, () => {
+const server = app.listen(2000, () => {
   console.log("Listening on *:2000")
 })
 
-const io = new Server(expressServer)
+const io = new Server(server)
 
 // add helmet here later for security
 app.engine("html", ejs.renderFile)
@@ -24,6 +24,27 @@ app.use(cookieParser())
 app.use(bp.json())
 app.use(bp.urlencoded({ extended:true }))
 
+// custom middleware
+app.use(async (req, res, next) => {
+  if (req.url != "/" && req.url.startsWith("/api/") == false) {
+    try {
+      const session = JSON.parse(req.cookies.session)
+      const user = await db`SELECT * FROM atomchat_users WHERE id = ${session.id}`
+      
+      if (user == null || user.length === 0) {
+        res.redirect("/")
+      } else {
+        next()
+      }
+    } catch (e) {
+      res.redirect("/")
+    }
+  } else {
+    next()
+  }
+})
+
+// postgres database
 const db = postgres({
   host: process.env.PGHOST,
   database: process.env.PGDATABASE,
@@ -37,30 +58,42 @@ const db = postgres({
 })
 
 app.get("/", async (req, res) => {
-  if (!req.cookies.session) {
-    res.render("login")
-  } else {
-    try {
-      const session = JSON.parse(req.cookies.session)
-      const user = await db`SELECT * FROM atomchat_users WHERE id = ${session.id}`
+  req.query.page == "signup" ? res.render("signup") : res.render("login")
+})
 
-      if (user == null || user.length === 0){
-        res.render("login")
-      } else {
-        res.render("chat", {
-          username: session.alias
-        })
-      }
-    } catch(e) {
-      res.render("login")
+app.get("/home", async (req, res) => {
+  const session = JSON.parse(req.cookies.session)
+
+  const servers = await db`SELECT * FROM atomchat_servers WHERE owner = ${session.id}`
+
+  res.render("home", {
+    username: session.alias,
+    servers: JSON.stringify(servers)
+  })
+})
+
+app.get("/server/:id", async (req, res) => {
+  const session = JSON.parse(req.cookies.session)
+  
+  try {
+    const server = await db`SELECT * FROM atomchat_servers WHERE id = ${req.params.id}`
+
+    if (server == null || server.length === 0) {
+      res.status(404).render("404")
+    } else {
+      res.render("chat", {
+        name: "test",
+        username: session.alias,
+        id: req.params.id
+      })
     }
+  } catch (e) {
+    res.status(404).render("404")
   }
 })
 
-app.get("/signup", async (req, res) => {
-  res.render("signup")
-})
 
+// signing up
 const signup_ratelimit = rateLimit({
 	windowMs: 180 * 60 * 1000, // 10 minutes
 	limit: 1,
@@ -69,7 +102,7 @@ const signup_ratelimit = rateLimit({
   message: "Please wait three hours before creating a new account!"
 })
 
-app.post("/signup", signup_ratelimit, async (req, res) => {
+app.post("/api/signup", signup_ratelimit, async (req, res) => {
   const user = await db`SELECT * FROM atomchat_users WHERE alias = ${req.body.alias.toLowerCase()}`
 
   if (req.body.alias.length < 4) {
@@ -86,7 +119,8 @@ app.post("/signup", signup_ratelimit, async (req, res) => {
   }
 })
 
-app.post("/login", async (req, res) => {
+// logging in
+app.post("/api/login", async (req, res) => {
   const user = await db`SELECT * FROM atomchat_users WHERE alias = ${req.body.alias.toLowerCase()}`
 
   if (user == null || user.length === 0) {
@@ -103,11 +137,11 @@ io.on("connection", (socket) => {
     const user = await db`SELECT * FROM atomchat_users WHERE id = ${msg.author}`
 
     if (user != null || user.length !== 0) {
-      io.emit("msg", { author: user[0].alias, text: msg.text })
+      io.emit(`msg_${msg.server}`, { author: user[0].alias, text: msg.text })
     }
   })
 })
 
-app.use((req, res, next) => {
+app.get("*", function(req, res){
   res.status(404).render("404")
 })

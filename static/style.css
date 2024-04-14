@@ -4,10 +4,12 @@
     --background: #232222;
     --background-lighter: #2c2a2a;
     --background-lightest: #353232;
-    --text: #fdf4f4;
+    --color: #fdf4f4;
     --secondary: #b6b0b0;
     --success: #4BB543;
     --danger: #D8524B;
+    --danger-darker: #db3c34;
+    --border-radius: 10px;
     --font: "Roboto", sans-serif;
 }
 
@@ -24,24 +26,8 @@
 body {
     margin: 20px 30px;
     background-color: var(--background);
-    color: var(--text);
+    color: var(--color);
     font-family: var(--font);
-}
-
-div.card {
-    margin: auto;
-    max-width: 450px;
-    padding: 10px 20px;
-}
-
-div.message {
-    background-color: var(--background-lightest);
-    max-width: 100%;
-    padding: 10px 5px;
-    margin-bottom: 10px;
-}
-div.message span {
-    color: var(--secondary);
 }
 
 input {
@@ -49,32 +35,80 @@ input {
     font-family: var(--font);
     font-size: 16px;
     background: var(--background-lighter);
-    border: 3px solid var(--background-lighter);
+    border: 3px solid var(--background-lightest);
     outline: none;
     height: 35px;
-    color: var(--text);
+    color: var(--color);
     padding: 0px 8px;
-    transition: 0.3s;
+    border-radius: var(--border-radius);
+    transition: 0.2s;
 }
 input:focus {
-    border-color: var(--background-lightest);
+    background-color: var(--background);
 }
 
 button {
     font-family: var(--font);
     font-size: 16px;
     background: var(--background-lighter);
-    border: 3px solid var(--background-lighter);
+    border: 3px solid var(--background-lightest);
     height: 35px;
-    color: var(--text);
+    color: var(--secondary);
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: var(--border-radius);
+    transition: 0.2s;
 }
 button:hover {
     cursor: pointer;
-    border-color: var(--background-lightest);
+    background-color: var(--background);
 }
 button.danger {
+    color: #fff;
     background-color: var(--danger);
+}
+button.danger:hover {
+    background-color: var(--danger-darker);
+}
+
+a {
+    text-decoration: underline;
+    color: var(--secondary);
+}
+a:hover {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+dialog {
+    background-color: var(--background);
+    color: var(--color);
+    border: 3px solid var(--background-lightest);
+    border-radius: var(--border-radius);
+    padding: 10px;
+    width: 350px;
+}
+::backdrop {
+    background-color: #000;
+    opacity: 0.5;
+}
+
+div.card {
+    margin: auto;
+    max-width: 450px;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+}
+
+div.message {
+    background-color: var(--background);
+    max-width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 3px solid var(--background-lightest);
+    border-radius: var(--border-radius);
+}
+div.message span {
+    color: var(--secondary);
 }

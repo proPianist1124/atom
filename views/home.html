@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <title>home | atomchat</title>
+        <%- include("./components/meta.html"); %>
+    </head>
+    <body>
+        <div id = "servers" class = "card" style = "background-color: var(--background);">
+            <%- include("./components/header.html"); %>
+            <p style = "color: var(--secondary);">My Servers:</p>
+        </div>
+        <div class = "card" style = "background-color: var(--background);">
+            <button id = "create-server">
+                <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                    <path d = "M5 12h14" />
+                    <path d = "M12 5v14" />
+                </svg>
+                &nbsp;Create a Server
+            </button>
+        </div>
+        <dialog>
+            <button onClick = "document.querySelector('dialog').close()" style = "margin-left: auto;">
+                <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                    <path d = "M18 6 6 18" />
+                    <path d = "m6 6 12 12" />
+                </svg>
+            </button>
+            <h2 style = "text-align: center;">Create Server</h2>
+            <form>
+                <input placeholder = "server name" style = "width: 100%;" />
+                <br><br>
+                <button style = "width: 100%;">Create</button>
+            </form>
+        </dialog>
+        <script>
+            const servers = JSON.parse(`<%- servers %>`)
+            servers.forEach((server) => {
+                const a = document.createElement("a")
+                a.setAttribute("href", `/server/${server.id}`)
+
+                const div = document.createElement("div")
+                div.setAttribute("class", "message")
+                div.innerText = server.name
+                a.appendChild(div)
+
+                document.getElementById("servers").appendChild(a)
+            })
+
+            document.getElementById("create-server").addEventListener("click", () => {
+                document.querySelector("dialog").showModal()
+            })
+        </script>
+        <script src = "/src/exit.js"></script>
+    </body>
+</html>

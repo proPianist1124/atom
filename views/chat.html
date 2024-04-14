@@ -7,22 +7,25 @@
     <body>
         <div class = "card" style = "background-color: var(--background);">
             <%- include("./components/header.html"); %>
-            <h3 style = "margin-top: 40px;">Lobby</h3>
-            <%- include("./components/space.html"); %>
+            <p style = "display: flex; align-items: center; color: var(--secondary);">
+                Server:&nbsp;<u><%- name %></u>
+                <span style = "color: var(--success); margin-left: auto;" id = "status">• Secure Connection</span>
+            </p>
+            <div id = "feed" class = "card" style = "height: 50vh; overflow: auto; margin-bottom: 30px; background-color: var(--background-lighter); border: 3px solid var(--background-lightest);"></div>
+            <p style = "color: var(--danger);" id = "error"></p>
+            <div style = "display: flex; align-items: center; justify-content: center;">
+                <input id = "message" placeholder = "your message" autocomplete = "off" style = "width: 100%; margin-right: 10px;" />
+                <input id = "id" value = "<%- id %>" type = "hidden" />
+                <button id = "send">
+                    Send&nbsp;&nbsp;
+                    <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                        <path d = "m3 3 3 9-3 9 19-9Z" />
+                        <path d = "M6 12h16" />
+                    </svg>
+                </button>
+            </div>
         </div>
-        <script>
-            document.body.addEventListener("keyup", function(e) {
-                if (localStorage.getItem("escape") && localStorage.getItem("escape") != "") {
-                    if (e.key == "Escape") {
-                        window.location.href = localStorage.getItem("escape")
-                    }
-                } else if(e.key == "Escape") {
-                    window.location.href = "http://gg.gg/18uvk3"
-                }
-                if (e.key == "Escape") {
-                    document.cookie = "session=; Max-Age=-99999999;"
-                }
-            })
-        </script>
+        <script src = "/src/send.js" type = "module"></script>
+        <script src = "/src/exit.js"></script>
     </body>
 </html>

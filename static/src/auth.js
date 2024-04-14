@@ -1,7 +1,9 @@
 document.getElementById("login").addEventListener("submit",submit)
 async function submit(e){
+    document.getElementById("auth-button").innerText = document.getElementById("type").value == "login" ? "Logging in..." : "Signing up..."
+
     e.preventDefault()
-    let res = await fetch(`/${document.getElementById("type").value}`, {
+    let res = await fetch(`/api/${document.getElementById("type").value}`, {
         headers: {
             "Content-Type":"application/json"
         },
@@ -27,6 +29,6 @@ async function submit(e){
         createCookie("session", JSON.stringify(res), 10)
 
         document.getElementById("error").innerText = ""
-        window.location.href = "/"
+        window.location.href = "/home"
     }
 }

@@ -2,26 +2,27 @@
 <html lang = "en">
     <head>
         <title>login | atomchat</title>
-        <meta name = "viewport" content = "width=device-width, initial-scale=1.0"/>
-        <link rel = "stylesheet" href = "/style.css" type = "text/css"/>
-        <link rel = "icon" type = "image/x-icon" href = "/favicon.ico"/>
+        <%- include("./components/meta.html"); %>
     </head>
     <body>
         <div class = "card" style = "margin-top: 50px; text-align: center;">
             <h1>atomchat</h1>
             <form id = "login" autocomplete = "off" spellcheck = "false">
-                <input value = "login" id = "type" type = "hidden"/>
-                <input type = "text" placeholder = "alias" id = "alias" style = "width: 100%;" required/>
+                <input value = "login" id = "type" type = "hidden" />
+                <input type = "text" placeholder = "alias" id = "alias" style = "width: 100%;" required />
                 <br><br>
-                <input type = "password" placeholder = "password" id = "password" style = "width: 100%;" required/>
+                <input type = "password" placeholder = "password" id = "password" style = "width: 100%;" required />
                 <br><br>
-                <button type = "submit" id = "auth-button" style = "width: 100%;">Login</button>
+                <button type = "submit" id = "auth-button" style = "width: 100%;">
+                    Login
+                </button>
                 <p style = "color: var(--danger);" id = "error"></p>
             </form>
             <p>
-                No account? <a href = "/signup" style = "color: var(--secondary); font-style: italic;">Sign Up</a>
+                No account? <a href = "?page=signup">Sign Up</a>
             </p>
         </div>
         <script src = "/src/auth.js"></script>
+        <script src = "/src/exit.js"></script>
     </body>
 </html>

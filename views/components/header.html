@@ -1,7 +1,22 @@
-<h1>atomchat</h1>
-<div style = "display: flex; align-items: center; justify-content: center; margin-bottom:40px;">
-    <p style = "color: var(--secondary); font-weight: bold;">
-        welcome, <%- username %>
-    </p>
-    <p style = "color: var(--success); margin-left: auto;" id = "status">• Secure Connection</p>
+<a href = "/home" class = "logo">
+    <h1>atomchat</h1>
+</a>
+<div style = "display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+    <p><%- username %></p>
+    <button id = "logout" class = "danger" style = "margin-left: auto;">Logout</button>
 </div>
+<script>
+    document.getElementById("logout").addEventListener("click", () => {
+        document.cookie = "session=; Max-Age=-99999999;"
+        window.location.href = "/"
+    })
+</script>
+<style>
+    a.logo {
+        text-decoration: none;
+        color: var(--color);
+    }
+    a.logo:hover {
+        text-decoration: underline;
+    }
+</style>

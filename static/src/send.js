@@ -20,7 +20,7 @@ const socket = io()
 const user = JSON.parse(getCookie("session"))
 
 // listen for messages from the server
-socket.on("msg", (msg) => {
+socket.on(`msg_${document.getElementById("id").value}`, (msg) => {
     const div = document.createElement("div")
     div.setAttribute("class", "message")
     
@@ -38,15 +38,14 @@ socket.on("msg", (msg) => {
 document.getElementById("send").addEventListener("click", send_message)
 
 function send_message() {
-    if(document.getElementById("message").value == ""){
+    if (document.getElementById("message").value == "") {
         document.getElementById("error").innerText = "Please write a message first!"
-    }else if(getCookie("session") == ""){
+    } else if(getCookie("session") == "") {
         window.location.href = "/"
-    }else{
+    } else {
         document.getElementById("error").innerText = ""
-        //socket.emit("msg", `${user.id}&&${document.getElementById("message").value}`)
-
-        socket.emit("msg", { author: user.id, text: document.getElementById("message").value })
+        
+        socket.emit("msg", { server: document.getElementById("id").value, author: user.id, text: document.getElementById("message").value })
 
         document.getElementById("message").value = ""
     }
@@ -58,14 +57,14 @@ let keys = {
 }
 
 addEventListener("keydown", (event) => {
-    if(event.key == "Shift"){
+    if (event.key == "Shift") {
       keys.shift = true
     }
-    if(event.key == "Enter") {
+    if (event.key == "Enter") {
       keys.enter = true
     }
 
-    if(keys.shift && keys.enter){
+    if (keys.shift && keys.enter) {
         send_message()
     }
 })
