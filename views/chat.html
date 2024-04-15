@@ -8,15 +8,15 @@
         <div class = "card">
             <%- include("./components/header.html"); %>
             <%- include("./components/profile.html"); %>
+            <input id = "id" value = "<%- id %>" type = "hidden" />
             <p style = "display: flex; align-items: center; color: var(--secondary);">
                 Server:&nbsp;<u><%- name %></u>
                 <span style = "color: var(--success); margin-left: auto;" id = "status">• Secure Connection</span>
             </p>
             <div id = "feed" class = "card" style = "height: 50vh; overflow: auto; margin-bottom: 30px; border: 3px solid var(--background-lightest);"></div>
-            <p style = "color: var(--danger);" id = "error"></p>
+            <p id = "error" style = "color: var(--danger);"></p>
             <div style = "display: flex; align-items: center; justify-content: center;">
                 <input id = "message" placeholder = "your message" autocomplete = "off" style = "width: 100%; margin-right: 10px;" />
-                <input id = "id" value = "<%- id %>" type = "hidden" />
                 <button id = "send">
                     Send&nbsp;&nbsp;
                     <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
@@ -26,6 +26,39 @@
                 </button>
             </div>
         </div>
+        <script>
+            if ("<%- owner %>" == "true") {
+                const button = document.createElement("button")
+
+                button.setAttribute("id", "delete")
+                button.setAttribute("class", "danger")
+                button.setAttribute("style", "margin-top: 20px; width: 100%;")
+                button.innerText = "Delete Server"
+
+                document.querySelector(".card").appendChild(button)
+            }
+
+            document.getElementById("delete").addEventListener("click", delete_server)
+
+            async function delete_server() {
+                let res = await fetch("/api/delete-server", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        id: document.getElementById("id").value
+                    })
+                })
+                res = await res.json()
+
+                if (res.error) {
+                    document.getElementById("error").innerText = res.error
+                } else {
+                    window.location.href = "/home"
+                }
+            }
+        </script>
         <script src = "/src/actions/send-message.js" type = "module"></script>
         <script src = "/src/misc/exit.js"></script>
     </body>

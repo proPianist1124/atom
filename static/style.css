@@ -9,7 +9,7 @@
     --success: #4BB543;
     --danger: #D8524B;
     --danger-darker: #db3c34;
-    --border-radius: 10px;
+    --border-radius: 5px;
     --font: "Roboto", sans-serif;
 }
 
@@ -67,11 +67,13 @@ button:hover {
     background: none;
 }
 button.danger {
-    color: #fff;
-    background-color: var(--danger);
+    color: var(--danger);
+    background-color: var(--background);
+    border: 1px solid var(--danger);
 }
 button.danger:hover {
     background-color: var(--danger-darker);
+    color: #fff;
 }
 
 a {
