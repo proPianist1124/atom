@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang = "en">
     <head>
-        <title>home | atomchat</title>
+        <title>home | atom</title>
         <%- include("./components/meta.html"); %>
     </head>
     <body>
-        <div id = "servers" class = "card">
-            <%- include("./components/header.html"); %>
-            <%- include("./components/profile.html"); %>
+        <div class = "card main">
+            <div style = "display: flex; align-items: center;">
+                <%- include("./components/header.html"); %>
+                <%- include("./components/profile.html"); %>
+            </div>
             <p style = "color: var(--secondary);">My Servers:</p>
-        </div>
-        <div class = "card">
-            <button id = "create-server">
+            <div id = "servers" style = "display: grid; grid-template-columns: auto auto auto;"></div>
+            <button onclick = "document.querySelector('dialog').showModal()" style = "margin-top: 20px; margin-bottom: 50px;">
                 <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
                     <path d = "M5 12h14" />
                     <path d = "M12 5v14" />
@@ -20,14 +21,14 @@
             </button>
         </div>
         <dialog>
-            <button onClick = "document.querySelector('dialog').close()" style = "margin-left: auto;">
+            <button class = "close" onClick = "document.querySelector('dialog').close()">
                 <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
                     <path d = "M18 6 6 18" />
                     <path d = "m6 6 12 12" />
                 </svg>
             </button>
-            <h2 style = "text-align: center;">Create Server</h2>
-            <input id = "server-name" placeholder = "server name" style = "width: 100%;" />
+            <h2>Create a Server</h2>
+            <input id = "server-name" placeholder = "server name" autocomplete = "off" style = "width: 100%;" />
             <br><br>
             <button id = "create-button" style = "width: 100%;">Create</button>
             <p id = "error" style = "text-align: center; color: var(--danger);"></p>
@@ -42,17 +43,14 @@
 
                 const div = document.createElement("div")
                 div.setAttribute("class", "card-secondary")
+                div.setAttribute("style", "margin-right: 10px;")
                 div.innerText = server.name
                 a.appendChild(div)
 
                 document.getElementById("servers").appendChild(a)
             })
-
-            document.getElementById("create-server").addEventListener("click", () => {
-                document.querySelector("dialog").showModal()
-            })
         </script>
         <script src = "/src/actions/create-server.js"></script>
-        <script src = "/src/misc/exit.js"></script>
+        <script src = "/src/actions/exit.js"></script>
     </body>
 </html>

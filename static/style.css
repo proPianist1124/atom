@@ -6,10 +6,13 @@
     --background-lightest: #353232;
     --color: #fdf4f4;
     --secondary: #b6b0b0;
+    --primary: #1e90ff;
+    --primary-darker: #037ffb;
     --success: #4BB543;
     --danger: #D8524B;
     --danger-darker: #db3c34;
-    --border-radius: 5px;
+    --border-radius: 10px;
+    --box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     --font: "Roboto", sans-serif;
 }
 
@@ -23,6 +26,10 @@
     background: var(--background-lightest); 
 }
 
+html {
+    margin-bottom: 20px;
+}
+
 body {
     margin: 20px 30px;
     background-color: var(--background);
@@ -33,11 +40,12 @@ body {
 }
 
 input {
+    box-shadow: var(--box-shadow);
     box-sizing: border-box;
     font-family: var(--font);
     font-size: 16px;
     background: var(--background-lighter);
-    border: 3px solid var(--background-lightest);
+    border: 1px solid var(--background-lightest);
     outline: none;
     height: 40px;
     color: var(--color);
@@ -46,14 +54,15 @@ input {
     transition: 0.2s;
 }
 input:focus {
-    background: none;
+    background: var(--background-lightest);
 }
 
 button {
+    box-shadow: var(--box-shadow);
     background: var(--background-lighter);
     font-family: var(--font);
     font-size: 16px;
-    border: 3px solid var(--background-lightest);
+    border: 1px solid var(--background-lightest);
     height: 40px;
     color: var(--secondary);
     display: flex;
@@ -64,7 +73,7 @@ button {
 }
 button:hover {
     cursor: pointer;
-    background: none;
+    background: var(--background-lightest);
 }
 button.danger {
     color: var(--danger);
@@ -89,10 +98,16 @@ dialog {
     background: none;
     backdrop-filter: blur(5px);
     color: var(--color);
-    border: 3px solid var(--background-lightest);
+    border: 1px solid var(--background-lightest);
     border-radius: var(--border-radius);
     padding: 10px;
     width: 350px;
+}
+dialog h2 {
+    text-align: center;
+}
+dialog button.close {
+    margin-left: auto;
 }
 ::backdrop {
     background-color: #000;
@@ -104,31 +119,96 @@ footer {
     left: 0;
     bottom: 0;
     width: 100%;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(3px);
     padding: 5px;
     color: var(--secondary);
     text-align: center;
 }
 
 div.card {
+    box-shadow: var(--box-shadow);
     margin: auto;
     max-width: 450px;
     padding: 10px 20px;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(3px);
     border-radius: var(--border-radius);
 }
 
-div.card-secondary {
-    max-width: 100%;
+div.card-secondary, div.message {
+    box-shadow: var(--box-shadow);
     padding: 10px;
     margin-bottom: 10px;
-    border: 3px solid var(--background-lightest);
+    border: 1px solid var(--background-lightest);
     border-radius: var(--border-radius);
     transition: 0.2s;
+}
+div.card-secondary {
+    max-width: 100%;
 }
 div.card-secondary span {
     color: var(--secondary);
 }
 div.card-secondary:hover {
     border-color: var(--background-lighter);
+}
+div.message {
+    width: fit-content;
+    border-radius: 50px;
+}
+  
+div.dropdown {
+    position: relative;
+    display: inline-block;
+}
+div.dropdown p.dropdown-click {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+div.dropdown p.dropdown-click:hover {
+    color: var(--secondary);
+}
+div.dropdown-content {
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--background-lightest);
+    display: none;
+    position: absolute;
+    background-color: var(--background-lighter);
+    min-width: 160px;
+    overflow: auto;
+    z-index: 1;
+    border-radius: var(--border-radius);
+}
+div.dropdown-content div {
+    padding: 12px 16px;
+    display: block;
+    cursor: pointer;
+    color: var(--secondary);
+    display: flex;
+    align-items: center;
+    transition: 0.2s;
+}
+div.dropdown-content div:hover {
+    background-color: var(--background-lightest);
+}
+div.dropdown-content div.danger:hover {
+    background-color: var(--danger);
+    color: #fff;
+}
+
+div.main {
+    max-width: 80%;
+    height: 85vh;
+}
+
+@media screen and (max-width: 600px){
+    span.hide {
+        display: none;
+    }
+    
+    div.main {
+        max-width: 100%;
+    }
 }

@@ -1,3 +1,5 @@
+import { createCookie } from "/src/misc/cookies.js"
+
 document.getElementById("login").addEventListener("submit", submit)
 
 async function submit(e){
@@ -11,9 +13,9 @@ async function submit(e){
         },
         method: "POST",
         body: JSON.stringify({
-            alias: document.getElementById("alias").value,
+            alias: String(String(document.getElementById("alias").value).toLowerCase()).replaceAll(" ", ""),
             password:document.getElementById("password").value,
-            invite_key: document.getElementById("invite_key") ? document.getElementById("invite_key").value : null
+            invite_key: document.getElementById("invite-key") ? document.getElementById("invite-key").value : null
          })
     })
     res = await res.json()
@@ -22,18 +24,8 @@ async function submit(e){
         document.getElementById("error").innerText = res.error
         document.getElementById("auth-button").innerText = document.getElementById("type").value == "login" ? "Login" : "Sign Up"
     } else {
-        function createCookie(name, value, minutes) {
-            if (minutes) {
-                let date = new Date()
-                date.setTime(date.getTime() + (minutes * 60 * 1000))
-                var expires = `expires=${date.toGMTString()}`
-            } else {
-                var expires = ""
-            }
-            document.cookie = `${name}=${value}; ${expires}; path=/`
-        }
-
-        createCookie("session", JSON.stringify(res), 10)
+        createCookie("sid", res.sid, 20)
+        createCookie("alias", res.alias, 20)
 
         document.getElementById("error").innerText = ""
         window.location.href = "/home"

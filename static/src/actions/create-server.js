@@ -15,6 +15,6 @@ async function create(){
     if (res.error) {
         document.getElementById("error").innerText = res.error
     } else {
-        window.location.reload()
+        window.location.href = `/server/${res.id}`
     }
 }

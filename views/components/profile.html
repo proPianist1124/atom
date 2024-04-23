@@ -1,16 +1,23 @@
-<div style = "display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-    <p style = "display: flex; align-items: center;">
-        <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
-            <path d = "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-            <circle cx = "12" cy = "7" r = "4" />
-        </svg>
-        &nbsp;<%- username %>
+<div style = "display: flex; align-items: center; justify-content: center; color: var(--secondary); margin-left: auto; border-radius: 50px; border: 1px solid var(--background-lighter); padding: 0px 10px;">
+    <span id = "profile-letter" style = "border-radius: 50px; width: 20px; height: 20px; padding: 5px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--background-lightest);"></span>
+    &nbsp;<span class = "hide"><%- alias %></span>
+    <p style = "color: var(--background-lightest); margin-left: 10px; margin-right: 10px; font-weight: 900;">
+        |
     </p>
-    <button id = "logout" class = "danger" style = "margin-left: auto;">Logout</button>
+    <button id = "logout" class = "danger" style = "height: 27px; width: 27px;">
+        <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+            <path d = "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points = "16 17 21 12 16 7" />
+            <line x1 = "21" x2 = "9" y1 = "12" y2 = "12" />
+        </svg>
+    </button>
 </div>
 <script>
+    const alias = "<%- alias %>"
+
+    document.getElementById("profile-letter").innerText = alias.charAt(0).toUpperCase()
+
     document.getElementById("logout").addEventListener("click", () => {
-        document.cookie = "session=; Max-Age=-99999999;"
-        window.location.href = "/"
+        window.location.href = "/logout"
     })
 </script>
