@@ -1,0 +1,71 @@
+<div id = "server-list" class = "card main server-list">
+    <span onclick = "document.querySelector('dialog').showModal()" style = "background-color: var(--background);">
+        <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+            <path d = "M5 12h14" />
+            <path d = "M12 5v14" />
+        </svg>
+    </span>
+</div>
+  
+<dialog>
+    <button class = "close" onClick = "document.querySelector('dialog').close()" style = "width: 40px;">
+        <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+            <path d = "M18 6 6 18" />
+            <path d = "m6 6 12 12" />
+        </svg>
+    </button>
+    <h2>Create a Server</h2>
+    <input id = "server-name" placeholder = "server name" autocomplete = "off" style = "width: 100%;" />
+    <br><br>
+    <button id = "create-button" style = "width: 100%;">Create</button>
+    <p id = "error" style = "text-align: center; color: var(--danger);"></p>
+</dialog>
+
+<script>    
+    JSON.parse(`<%- servers %>`).forEach((server) => {
+        const span = document.createElement("span")
+        span.innerText = server.name[0].toUpperCase()
+
+        span.addEventListener("click", () => {
+            window.location.href = `/server/${server.id}`
+        })
+
+        span.addEventListener("mouseover", () => {
+            span.style.width = "fit-content"
+            span.innerHTML = `&nbsp;&nbsp;&nbsp;&nbsp;${server.name}&nbsp;&nbsp;&nbsp;&nbsp;`
+        })
+
+        span.addEventListener("mouseout", () => {
+            span.style.width = "30px"
+            span.innerText = server.name[0].toUpperCase()
+        })
+
+        document.getElementById("server-list").appendChild(span)
+    
+    })
+</script>
+<script src = "/src/actions/create-server.js"></script>
+
+<style>
+    div.server-list {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+    }
+    div.server-list span {
+        border-radius: 50px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--background-lighter);
+        border: 1px solid var(--background-lightest);
+        margin-right: 10px;
+        transition: 0.2s;
+        cursor: pointer;
+    }
+    div.server-list span:hover {
+        background-color: var(--background-lightest);
+    }
+</style>

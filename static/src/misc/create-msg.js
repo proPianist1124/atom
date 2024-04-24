@@ -9,7 +9,7 @@ export function create_msg(msg) {
     // message box
     const div = document.createElement("div")
     div.setAttribute("class", "message")
-    div.setAttribute("style", `margin-bottom: 20px; ${msg.author == getCookie("alias") ? "background-color: var(--primary); border-color: var(--primary-darker); margin-left: auto; border-radius: 50px 0px 0px 50px;" : "color: var(--secondary); border-radius: 0px 50px 50px 0px;"}`)
+    div.setAttribute("style", `margin-bottom: 20px; ${msg.author == getCookie("alias") ? "background-color: var(--primary); border-color: var(--primary-darker); margin-left: auto;" : "color: var(--secondary);"}`)
     
     const span = document.createElement("span")
     span.innerText = msg.text

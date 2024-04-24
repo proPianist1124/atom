@@ -12,14 +12,14 @@
             </div>
             <input id = "id" value = "<%- id %>" type = "hidden" />
             <div class = "dropdown">
-                <p class = "dropdown-click" onclick = "dropdown()">
+                <button class = "dropdown-click" onclick = "dropdown()">
                     <%- name %>&nbsp;
                     <span id = "icon" style = "display: flex; align-items: center; justify-content: center;">
                         <svg xmlns = "http://www.w3.org/2000/svg" width = "20" height = "20" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
                             <path d = "m6 9 6 6 6-6" />
                         </svg>
                     </span>
-                </p>
+                </button>
                 <div id = "dropdown" class = "dropdown-content">
                     <div id = "settings" onclick = "document.querySelector('dialog#settings').showModal()">
                         <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "24" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
@@ -46,7 +46,7 @@
                         </svg>
                         &nbsp;Invite
                     </div>
-                    <div class = "danger">
+                    <div id = "leave" class = "danger">
                         <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
                             <path d = "M13 4h3a2 2 0 0 1 2 2v14" />
                             <path d = "M2 20h3" />
@@ -60,13 +60,14 @@
             </div>
             <div id = "feed" style = "height: 50vh; overflow: auto; margin-bottom: 30px; border: none; max-width: 100%;"></div>
             <div style = "display: flex; align-items: center; justify-content: center;">
-                <input id = "message" placeholder = "your message" autocomplete = "off" style = "width: 100%; margin-right: 10px; border-radius: 50px 0px 0px 50px;" />
-                <button id = "send" style = "width: 15%; color: var(--color); border-radius: 0px 50px 50px 0px;">
-                    <svg xmlns = "http://www.w3.org/2000/svg" width = "20" height = "20" viewBox = "0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+                <input id = "message" placeholder = "your message" autocomplete = "off" style = "width: 100%; margin-right: 10px; border-radius: var(--border-radius) 0px 0px var(--border-radius);" />
+                <button id = "send" style = "color: var(--color); border-radius: 0px var(--border-radius) var(--border-radius) 0px;">
+                    <svg xmlns = "http://www.w3.org/2000/svg" width = "20" height = "20" viewBox = "0 0 24 24" fill = "none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
                 </button>
             </div>
             <p id = "error" style = "color: var(--danger);"></p>
         </div>
+        <%- include("./components/server-list.html"); %>
         <dialog id = "settings">
             <button class = "close" onClick = "document.querySelector('dialog#settings').close()">
                 <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
@@ -75,24 +76,26 @@
                 </svg>
             </button>
             <h2>Server Settings</h2>
-            <button id = "purge" class = "danger" style = "width: 100%; margin-bottom: 10px;">
-                <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
-                    <path d = "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                    <path d = "m14.5 7.5-5 5" />
-                    <path d = "m9.5 7.5 5 5" />
-                </svg>
-                &nbsp;<span class = "hide">Purge Messages</span>
-            </button>
-            <button id = "delete" class = "danger" style = "width: 100%;">
-                <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
-                    <path d = "M3 6h18" />
-                    <path d = "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                    <path d = "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                    <line x1 = "10" x2 = "10" y1 = "11" y2 = "17" />
-                    <line x1 = "14" x2 = "14" y1 = "11" y2 = "17" />
-                </svg>
-                &nbsp;<span class = "hide">Delete Server</span>
-            </button>
+            <div style = "display: flex; align-items: center; justify-content: center;">
+                <button id = "purge" class = "danger" style = "width: 100%; margin-right: 10px;">
+                    <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                        <path d = "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        <path d = "m14.5 7.5-5 5" />
+                        <path d = "m9.5 7.5 5 5" />
+                    </svg>
+                    &nbsp;<span class = "hide">Purge Messages</span>
+                </button>
+                <button id = "delete" class = "danger" style = "width: 100%;">
+                    <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                        <path d = "M3 6h18" />
+                        <path d = "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                        <path d = "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                        <line x1 = "10" x2 = "10" y1 = "11" y2 = "17" />
+                        <line x1 = "14" x2 = "14" y1 = "11" y2 = "17" />
+                    </svg>
+                    &nbsp;<span class = "hide">Delete Server</span>
+                </button>
+            </div>
         </dialog>
         <dialog id = "members">
             <button class = "close" onClick = "document.querySelector('dialog#members').close()">
@@ -103,6 +106,7 @@
             </button>
             <h2>Members</h2>
         </dialog>
+        
         <script type = "module">
             import { create_msg } from "/src/misc/create-msg.js"
 
@@ -156,7 +160,20 @@
             })
         </script>
         <script src = "/src/actions/send-msg.js" type = "module"></script>
+        <script src = "/src/actions/leave-server.js"></script>
         <script src = "/src/misc/dropdown.js"></script>
         <script src = "/src/actions/exit.js"></script>
+
+        <style>
+            #send {
+                width: 10%;
+            }
+
+            @media screen and (max-width: 600px) {
+                #send {
+                    width: 20%;
+                }
+            }
+        </style>
     </body>
 </html>

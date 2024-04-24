@@ -33,7 +33,7 @@ html {
 body {
     margin: 20px 30px;
     background-color: var(--background);
-    background-image:  linear-gradient(var(--background-lightest) 1px, transparent 1px), linear-gradient(to right, var(--background-lightest) 1px, var(--background) 1px);
+    background-image:  linear-gradient(var(--background-lighter) 1px, transparent 1px), linear-gradient(to right, var(--background-lighter) 1px, var(--background) 1px);
     background-size: 20px 20px;
     color: var(--color);
     font-family: var(--font);
@@ -160,17 +160,21 @@ div.dropdown {
     position: relative;
     display: inline-block;
 }
-div.dropdown p.dropdown-click {
+div.dropdown .dropdown-click {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--background-lightest);
+    background-color: var(--background-lighter);
     cursor: pointer;
     transition: 0.2s;
 }
-div.dropdown p.dropdown-click:hover {
-    color: var(--secondary);
+div.dropdown .dropdown-click:hover {
+    background-color: var(--background-lightest);
 }
 div.dropdown-content {
+    margin-top: 10px;
     box-shadow: var(--box-shadow);
     border: 1px solid var(--background-lightest);
     display: none;
@@ -200,10 +204,9 @@ div.dropdown-content div.danger:hover {
 
 div.main {
     max-width: 80%;
-    height: 85vh;
 }
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 600px) {
     span.hide {
         display: none;
     }

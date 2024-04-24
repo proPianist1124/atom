@@ -10,46 +10,11 @@
                 <%- include("./components/header.html"); %>
                 <%- include("./components/profile.html"); %>
             </div>
-            <p style = "color: var(--secondary);">My Servers:</p>
-            <div id = "servers" style = "display: grid; grid-template-columns: auto auto auto;"></div>
-            <button onclick = "document.querySelector('dialog').showModal()" style = "margin-top: 20px; margin-bottom: 50px;">
-                <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
-                    <path d = "M5 12h14" />
-                    <path d = "M12 5v14" />
-                </svg>
-                &nbsp;Create a Server
-            </button>
+            <p style = "color: var(--secondary);">My Friends</p>
+            home page
         </div>
-        <dialog>
-            <button class = "close" onClick = "document.querySelector('dialog').close()">
-                <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
-                    <path d = "M18 6 6 18" />
-                    <path d = "m6 6 12 12" />
-                </svg>
-            </button>
-            <h2>Create a Server</h2>
-            <input id = "server-name" placeholder = "server name" autocomplete = "off" style = "width: 100%;" />
-            <br><br>
-            <button id = "create-button" style = "width: 100%;">Create</button>
-            <p id = "error" style = "text-align: center; color: var(--danger);"></p>
-        </dialog>
-        <script>
-            const servers = JSON.parse(`<%- servers %>`)
+        <%- include("./components/server-list.html"); %>
 
-            servers.forEach((server) => {
-                const a = document.createElement("a")
-                a.setAttribute("href", `/server/${server.id}`)
-                a.setAttribute("style", "text-decoration: none; color: var(--secondary);")
-
-                const div = document.createElement("div")
-                div.setAttribute("class", "card-secondary")
-                div.setAttribute("style", "margin-right: 10px;")
-                div.innerText = server.name
-                a.appendChild(div)
-
-                document.getElementById("servers").appendChild(a)
-            })
-        </script>
         <script src = "/src/actions/create-server.js"></script>
         <script src = "/src/actions/exit.js"></script>
     </body>

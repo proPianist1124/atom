@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser")
 const bp = require("body-parser")
 const ejs = require("ejs")
 const sha256 = require("js-sha256")
-const { rateLimit } = require("express-rate-limit")
+//const { rateLimit } = require("express-rate-limit")
 const { v4: uuidv4 } = require("uuid")
 const postgres = require("postgres")
 require("dotenv").config()
@@ -101,13 +101,16 @@ app.get("/server/:id", async (req, res) => {
         await db`UPDATE atom_users SET joined = ${joined} WHERE id = ${req.cookies.sid};`
       }
 
+      const servers = user[0].joined
+
       res.render("chat", {
         id: server[0].id,
         name: server[0].name,
         owner: server[0].owner == req.cookies.sid,
         alias: user[0].alias,
         messages: JSON.stringify(server[0].messages),
-        members: JSON.stringify(members)
+        members: JSON.stringify(members),
+        servers: JSON.stringify(servers.reverse())
       })
     }
   } catch (e) {

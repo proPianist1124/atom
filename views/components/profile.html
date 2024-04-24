@@ -1,6 +1,6 @@
-<div style = "display: flex; align-items: center; justify-content: center; color: var(--secondary); margin-left: auto; border-radius: 50px; border: 1px solid var(--background-lighter); padding: 0px 10px;">
-    <span id = "profile-letter" style = "border-radius: 50px; width: 20px; height: 20px; padding: 5px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--background-lightest);"></span>
-    &nbsp;<span class = "hide"><%- alias %></span>
+<div style = "display: flex; align-items: center; justify-content: center; color: var(--secondary); margin-left: auto; border-radius: var(--border-radius); border: 1px solid var(--background-lighter); padding: 0px 10px;">
+    <span id = "profile-letter" style = "border-radius: 50px; width: 20px; height: 20px; padding: 5px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--background-lightest); margin-right: 5px;"></span>
+    <span class = "hide"><%- alias %></span>
     <p style = "color: var(--background-lightest); margin-left: 10px; margin-right: 10px; font-weight: 900;">
         |
     </p>
@@ -12,6 +12,7 @@
         </svg>
     </button>
 </div>
+
 <script>
     const alias = "<%- alias %>"
 
