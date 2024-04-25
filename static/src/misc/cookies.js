@@ -1,8 +1,8 @@
 export function getCookie(cname) {
     let name = `${cname}=`
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
+    let decodedCookie = decodeURIComponent(document.cookie)
+    let ca = decodedCookie.split(";")
+    for(let i = 0; i < ca.length; i++) {
         let c = ca[i]
         while (c.charAt(0) == " ") {
             c = c.substring(1)
@@ -14,10 +14,10 @@ export function getCookie(cname) {
     return ""
 }
 
-export function createCookie(name, value, minutes) {
-    if (minutes) {
+export function createCookie(name, value, hours) {
+    if (hours) {
         let date = new Date()
-        date.setTime(date.getTime() + (minutes * 60 * 1000))
+        date.setTime(date.getTime() + (hours * 60 * 60 * 1000))
         var expires = `expires=${date.toGMTString()}`
     } else {
         var expires = ""

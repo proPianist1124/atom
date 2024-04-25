@@ -92,8 +92,8 @@ app.get("/server/:id", async (req, res) => {
       const members = server[0].members
       const joined = user[0].joined
 
-      if (members.includes(req.cookies.alias) == false) {
-        members.push(req.cookies.alias)
+      if (members.includes(user[0].alias) == false) {
+        members.push(user[0].alias)
         joined.push({ id: req.params.id, name: server[0].name })
 
         // setting user as a new member of the server if aren't currently a member
@@ -118,6 +118,22 @@ app.get("/server/:id", async (req, res) => {
   }
 })
 
+// logging in
+app.post("/api/login", async (req, res) => {
+  if (req.body.alias == "" || req.body.password == "") {
+    res.json({ error: "Please fill out all fields." })
+  } else {
+    const user = await db`SELECT * FROM atom_users WHERE alias = ${req.body.alias.toLowerCase()};`
+
+    if (user == null || user.length === 0) {
+      res.json({ error: "User not found." })
+    } else if (user[0].password !== sha256(req.body.password)) {
+      res.json({ error: "Incorrect password." })
+    } else {
+      res.json({ sid: user[0].id, alias: user[0].alias })
+    }
+  }
+})
 
 // signing up
 /* const signup_ratelimit = rateLimit({
@@ -149,25 +165,7 @@ app.post("/api/signup", async (req, res) => {
       res.json({ error: "Alias is already in use." })
     }
   } catch (e) {
-    console.log(e)
     res.json({ error: "An error occured." })
-  }
-})
-
-// logging in
-app.post("/api/login", async (req, res) => {
-  if (req.body.alias == "" || req.body.password == "") {
-    res.json({ error: "Please fill out all fields." })
-  } else {
-    const user = await db`SELECT * FROM atom_users WHERE alias = ${req.body.alias.toLowerCase()};`
-
-    if (user == null || user.length === 0) {
-      res.json({ error: "User not found." })
-    } else if (user[0].password !== sha256(req.body.password)) {
-      res.json({ error: "Incorrect password." })
-    } else {
-      res.json({ sid: user[0].id, alias: user[0].alias })
-    }
   }
 })
 
@@ -234,6 +232,26 @@ app.post("/api/purge-msgs", async (req, res) => {
   }
 })
 
+// leaving a server
+app.post("/api/leave-server", async (req, res) => {
+  const server = await db`SELECT * FROM atom_servers WHERE id = ${req.body.id};`
+
+  if (server[0].owner != req.cookies.sid) {
+    try {
+      const user = await db`SELECT * FROM atom_users WHERE id = ${req.cookies.sid};`
+  
+      await db`UPDATE atom_users SET joined = ${user[0].joined.filter((server) => server.id != req.body.id)} WHERE id = ${req.cookies.sid};`
+      await db`UPDATE atom_servers SET members = ${server[0].members.filter((member) => member != user[0].alias)} WHERE id = ${req.body.id};`
+  
+      res.json({ success: true })
+    } catch (e) {
+      res.json({ error: e.message })
+    }
+  } else {
+    res.json({ error: "You cannot leave a server you own, you can only delete it." })
+  }
+})
+
 // logging out
 app.get("/logout", async (req, res) => {
   res.clearCookie("sid")
@@ -251,12 +269,28 @@ io.on("connection", (socket) => {
 
         const server = await db`SELECT messages FROM atom_servers WHERE id = ${msg.server};`
 
-        server[0].messages.push({ author: user[0].alias, text: msg.text })
+        server[0].messages.push({ author: user[0].alias, text: msg.text.replaceAll(`"`, `'`) })
       
         await db`UPDATE atom_servers SET messages = ${server[0].messages} WHERE id = ${msg.server};`
       }
     } catch (e) {
-      console.log(e)
+      return e
+    }
+  })
+
+  socket.on("status", async (user_details) => {
+    try {
+      if (user_details && user_details.sid != null) {
+        const user = await db`SELECT * FROM atom_users WHERE id = ${user_details.sid};`
+
+        if (user_details.status == "online") {
+          io.emit("status", { status: "online", alias: user[0].alias })
+        } else {
+          io.emit("status", { status: "offline", alias: user[0].alias })
+        }
+      }
+    } catch (e) {
+      return e
     }
   })
 })

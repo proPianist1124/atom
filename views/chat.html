@@ -13,8 +13,8 @@
             <input id = "id" value = "<%- id %>" type = "hidden" />
             <div class = "dropdown">
                 <button class = "dropdown-click" onclick = "dropdown()">
-                    <%- name %>&nbsp;
-                    <span id = "icon" style = "display: flex; align-items: center; justify-content: center;">
+                    <%- name %>
+                    <span id = "icon" style = "display: flex; align-items: center; justify-content: center; margin-left: 20px;">
                         <svg xmlns = "http://www.w3.org/2000/svg" width = "20" height = "20" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
                             <path d = "m6 9 6 6 6-6" />
                         </svg>
@@ -58,9 +58,9 @@
                     </div>
                 </div>
             </div>
-            <div id = "feed" style = "height: 50vh; overflow: auto; margin-bottom: 30px; border: none; max-width: 100%;"></div>
+            <div id = "feed" style = "height: 50vh; overflow: auto; margin-top: 25px; margin-bottom: 30px; max-width: 100%; border-top: 1px solid var(--background-lighter); padding-top: 20px;"></div>
             <div style = "display: flex; align-items: center; justify-content: center;">
-                <input id = "message" placeholder = "your message" autocomplete = "off" style = "width: 100%; margin-right: 10px; border-radius: var(--border-radius) 0px 0px var(--border-radius);" />
+                <input id = "message" placeholder = "Type a message…" autocomplete = "off" style = "width: 100%; margin-right: 10px; border-radius: var(--border-radius) 0px 0px var(--border-radius);" />
                 <button id = "send" style = "color: var(--color); border-radius: 0px var(--border-radius) var(--border-radius) 0px;">
                     <svg xmlns = "http://www.w3.org/2000/svg" width = "20" height = "20" viewBox = "0 0 24 24" fill = "none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
                 </button>
@@ -108,7 +108,9 @@
         </dialog>
         
         <script type = "module">
+            import { io } from "/src/misc/socket-io.js"
             import { create_msg } from "/src/misc/create-msg.js"
+            import { getCookie } from "/src/misc/cookies.js"
 
             if ("<%- owner %>" != "true") {
                 document.getElementById("settings").style.display = "none"
@@ -152,17 +154,39 @@
 
                 const div = document.createElement("div")
                 div.setAttribute("class", "card-secondary")
+                div.setAttribute("style", "display: flex; align-items: center;")
                 div.innerText = member
+
+                const span = document.createElement("span")
+                span.setAttribute("id", member)
+                span.setAttribute("style", "display: block; color: var(--success); margin-left: 5px; font-weight: bold;")
+                span.innerText = "•"
+                div.appendChild(span)
 
                 a.appendChild(div)
                 
                 document.querySelector("dialog#members").appendChild(a)
             })
+
+            // check if member has disconnected
+            const socket = io()
+
+            document.addEventListener("visibilitychange", disconnect)
+
+            function disconnect() {
+                if (document.visibilityState !== 'visible') {
+                    socket.emit("status", { status: "offline", sid: getCookie("sid") })
+                }
+            }
+
+            socket.on("status", (user_details) => {
+                document.getElementById(user_details.alias).style.color = user_details.status == "offline" ? "var(--danger)" : "var(--success)"
+            })
         </script>
         <script src = "/src/actions/send-msg.js" type = "module"></script>
         <script src = "/src/actions/leave-server.js"></script>
         <script src = "/src/misc/dropdown.js"></script>
-        <script src = "/src/actions/exit.js"></script>
+        <script src = "/src/actions/onload.js" type = "module"></script>
 
         <style>
             #send {

@@ -1,6 +1,8 @@
-document.getElementById("create-button").addEventListener("click", create)
+document.getElementById("create-server").addEventListener("submit", create)
 
-async function create(){
+async function create(e){
+    e.preventDefault()
+
     let res = await fetch("/api/create-server", {
         method: "POST",
         headers: {

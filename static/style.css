@@ -33,7 +33,7 @@ html {
 body {
     margin: 20px 30px;
     background-color: var(--background);
-    background-image:  linear-gradient(var(--background-lighter) 1px, transparent 1px), linear-gradient(to right, var(--background-lighter) 1px, var(--background) 1px);
+    background-image:  linear-gradient(var(--background-lighter) 0.5px, transparent 0.5px), linear-gradient(to right, var(--background-lighter) 0.5px, var(--background) 0.5px);
     background-size: 20px 20px;
     color: var(--color);
     font-family: var(--font);
@@ -108,6 +108,7 @@ dialog h2 {
 }
 dialog button.close {
     margin-left: auto;
+    width: 40px;
 }
 ::backdrop {
     background-color: #000;
@@ -126,7 +127,6 @@ footer {
 }
 
 div.card {
-    box-shadow: var(--box-shadow);
     margin: auto;
     max-width: 450px;
     padding: 10px 20px;

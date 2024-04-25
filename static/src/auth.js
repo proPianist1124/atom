@@ -24,8 +24,8 @@ async function submit(e){
         document.getElementById("error").innerText = res.error
         document.getElementById("auth-button").innerText = document.getElementById("type").value == "login" ? "Login" : "Sign Up"
     } else {
-        createCookie("sid", res.sid, 20)
-        createCookie("alias", res.alias, 20)
+        createCookie("sid", res.sid, 24)
+        createCookie("alias", res.alias, 24)
 
         document.getElementById("error").innerText = ""
         window.location.href = "/home"
