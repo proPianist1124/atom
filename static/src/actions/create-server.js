@@ -1,6 +1,7 @@
 document.getElementById("create-server").addEventListener("submit", create)
 
 async function create(e){
+    e.stopImmediatePropagation()
     e.preventDefault()
 
     let res = await fetch("/api/create-server", {
