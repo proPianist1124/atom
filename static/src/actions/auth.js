@@ -1,24 +1,19 @@
+import { fetch_api } from "/src/misc/fetch.js"
 import { createCookie } from "/src/misc/cookies.js"
 
 document.getElementById("login").addEventListener("submit", submit)
 
 async function submit(e){
     e.preventDefault()
+    e.stopImmediatePropagation()
 
     document.getElementById("auth-button").innerText = document.getElementById("type").value == "login" ? "Logging in..." : "Signing up..."
-
-    let res = await fetch(`/api/${document.getElementById("type").value}`, {
-        headers: {
-            "Content-Type":"application/json"
-        },
-        method: "POST",
-        body: JSON.stringify({
-            alias: String(String(document.getElementById("alias").value).toLowerCase()).replaceAll(" ", ""),
-            password:document.getElementById("password").value,
-            invite_key: document.getElementById("invite-key") ? document.getElementById("invite-key").value : null
-         })
+    
+    let res = await fetch_api(`/api/${document.getElementById("type").value}`, {
+        alias: String(String(document.getElementById("alias").value).toLowerCase()).replaceAll(" ", ""),
+        password:document.getElementById("password").value,
+        invite_key: document.getElementById("invite-key") ? document.getElementById("invite-key").value : null
     })
-    res = await res.json()
 
     if (res.error) {
         document.getElementById("error").innerText = res.error

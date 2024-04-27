@@ -37,7 +37,7 @@
                         </svg>
                         &nbsp;Members
                     </div>
-                    <div>
+                    <div onclick = "document.querySelector('dialog#invite').showModal()">
                         <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
                             <path d = "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                             <circle cx = "9" cy = "7" r = "4" />
@@ -59,12 +59,15 @@
                 </div>
             </div>
             <div id = "feed" style = "height: 50vh; overflow: auto; margin-top: 25px; margin-bottom: 30px; max-width: 100%; border-top: 1px solid var(--background-lighter); padding-top: 20px;"></div>
-            <div style = "display: flex; align-items: center; justify-content: center;">
+            <form id = "send-msg" style = "width: 100%; display: flex; align-items: center; justify-content: center;">
                 <input id = "message" placeholder = "Type a message…" autocomplete = "off" style = "width: 100%; margin-right: 10px; border-radius: var(--border-radius) 0px 0px var(--border-radius);" />
-                <button id = "send" style = "color: var(--color); border-radius: 0px var(--border-radius) var(--border-radius) 0px;">
-                    <svg xmlns = "http://www.w3.org/2000/svg" width = "20" height = "20" viewBox = "0 0 24 24" fill = "none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+                <button type = "submit" style = "color: var(--color); border-radius: 0px var(--border-radius) var(--border-radius) 0px; width: 10%;">
+                    <svg xmlns = "http://www.w3.org/2000/svg" width = "20" height = "20" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                        <path d = "m5 12 7-7 7 7" />
+                        <path d = "M12 19V5" />
+                    </svg>
                 </button>
-            </div>
+            </form>
             <p id = "error" style = "color: var(--danger);"></p>
         </div>
         <%- include("./components/server-list.html"); %>
@@ -106,9 +109,20 @@
             </button>
             <h2>Members</h2>
         </dialog>
+        <dialog id = "invite">
+            <button class = "close" onClick = "document.querySelector('dialog#invite').close()">
+                <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                    <path d = "M18 6 6 18" />
+                    <path d = "m6 6 12 12" />
+                </svg>
+            </button>
+            <h2>Invite Link</h2>
+            <input id = "invite-link" value = "https://google.com" style = "width: 100%" disabled />
+        </dialog>
         
         <script type = "module">
-            import { io } from "/src/misc/socket-io.js"
+            import { io } from "/src/socket-io.js"
+            import { fetch_api } from "/src/misc/fetch.js"
             import { create_msg } from "/src/misc/create-msg.js"
             import { getCookie } from "/src/misc/cookies.js"
 
@@ -126,16 +140,9 @@
             document.getElementById("purge").addEventListener("click", () => delete_action("purge-msgs"))
 
             async function delete_action(route) {
-                let res = await fetch(`/api/${route}`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        id: document.getElementById("id").value
-                    })
+                let res = await fetch_api(`/api/${route}`, {
+                    id: document.getElementById("id").value
                 })
-                res = await res.json()
 
                 if (res.error) {
                     document.getElementById("error").innerText = res.error
@@ -159,7 +166,7 @@
 
                 const span = document.createElement("span")
                 span.setAttribute("id", member)
-                span.setAttribute("style", "display: block; color: var(--success); margin-left: 5px; font-weight: bold;")
+                span.setAttribute("style", "display: block; margin-left: 5px; font-weight: bold;")
                 span.innerText = "•"
                 div.appendChild(span)
 
@@ -182,9 +189,12 @@
             socket.on("status", (user_details) => {
                 document.getElementById(user_details.alias).style.color = user_details.status == "offline" ? "var(--danger)" : "var(--success)"
             })
+
+            // add an invite link
+            document.getElementById("invite-link").value = `${window.location.origin}/server/${document.getElementById("id").value}`
         </script>
         <script src = "/src/actions/send-msg.js" type = "module"></script>
-        <script src = "/src/actions/leave-server.js"></script>
+        <script src = "/src/actions/leave-server.js" type = "module"></script>
         <script src = "/src/misc/dropdown.js"></script>
         <script src = "/src/actions/onload.js" type = "module"></script>
 

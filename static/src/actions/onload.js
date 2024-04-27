@@ -1,4 +1,4 @@
-import { io } from "/src/misc/socket-io.js"
+import { io } from "/src/socket-io.js"
 import { getCookie } from "/src/misc/cookies.js"
 
 document.body.addEventListener("keyup", function(e) {

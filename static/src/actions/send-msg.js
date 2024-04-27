@@ -1,4 +1,4 @@
-import { io } from "/src/misc/socket-io.js"
+import { io } from "/src/socket-io.js"
 import { create_msg } from "/src/misc/create-msg.js"
 import { getCookie } from "/src/misc/cookies.js"
 
@@ -10,9 +10,12 @@ socket.on(`msg_${document.getElementById("id").value}`, (msg) => {
 })
 
 // send a message to the server
-document.getElementById("send").addEventListener("click", send_message)
+document.getElementById("send-msg").addEventListener("submit", send_message)
 
-function send_message() {
+function send_message(e) {
+    e.preventDefault()
+    e.stopImmediatePropagation()
+  
     if (document.getElementById("message").value == "") {
         document.getElementById("error").innerText = "Please write a message first!"
     } else {
@@ -23,29 +26,3 @@ function send_message() {
         document.getElementById("message").value = ""
     }
 }
-
-let keys = {
-    shift: false,
-    enter: false
-}
-
-addEventListener("keydown", (event) => {
-    if (event.key == "Shift") {
-      keys.shift = true
-    }
-    if (event.key == "Enter") {
-      keys.enter = true
-    }
-
-    if (keys.shift && keys.enter) {
-        send_message()
-    }
-})
-addEventListener("keyup", (event) => {
-    if (event.key == "Shift") {
-      keys.shift = false
-    }
-    if (event.key == "Enter") {
-      keys.enter = false
-    }
-})

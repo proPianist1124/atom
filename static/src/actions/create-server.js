@@ -1,19 +1,12 @@
+import { fetch_api } from "/src/misc/fetch.js"
+
 document.getElementById("create-server").addEventListener("submit", create)
 
 async function create(e){
-    e.stopImmediatePropagation()
     e.preventDefault()
+    e.stopImmediatePropagation()
 
-    let res = await fetch("/api/create-server", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            name: document.getElementById("server-name").value
-        })
-    })
-    res = await res.json()
+    let res = await fetch_api("/api/create-server", { name: document.getElementById("server-name").value })
 
     if (res.error) {
         document.getElementById("error").innerText = res.error
