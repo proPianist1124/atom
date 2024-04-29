@@ -5,17 +5,88 @@
         <%- include("./components/meta.html"); %>
     </head>
     <body>
-        <div class = "card main">
+        <div id = "friends" class = "card main">
             <div style = "display: flex; align-items: center;">
                 <%- include("./components/header.html"); %>
                 <%- include("./components/profile.html"); %>
             </div>
-            <p style = "color: var(--secondary);">My Friends</p>
-            <div style = "display: flex; align-items: center;"></div>
+            <p style = "color: var(--secondary); display: flex; align-items: center;">
+                <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                    <path d = "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx = "9" cy = "7" r = "4" />
+                    <path d = "M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d = "M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                &nbsp;My Friends
+            </p>
+            <form id = "add-friend" autocomplete = "off" style = "display: flex; align-items: center;">
+                <input id = "friend-username" placeholder = "Friend's Username…" style = "width: fit-content; margin-right: 10px; border-radius: var(--border-radius) 0px 0px var(--border-radius);" />
+                <button type = "submit" style = "border-radius: 0px var(--border-radius) var(--border-radius) 0px;">
+                    <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                        <path d = "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx = "9" cy = "7" r = "4" />
+                        <line x1 = "19" x2 = "19" y1 = "8" y2 = "14" />
+                        <line x1 = "22" x2 = "16" y1 = "11" y2 = "11" />
+                    </svg>
+                    <span class = "hide">
+                        &nbsp;Add Friend
+                    </span>
+                </button>
+            </form>
+            <p id = "message"></p>
         </div>
         <%- include("./components/server-list.html"); %>
 
-        <script src = "/src/actions/create-server.js"></script>
+        <script type = "module">
+            import { fetch_api } from "/src/misc/fetch.js"
+
+            const friends = JSON.parse(`<%- friends %>`)
+
+            friends.forEach((friend) => {
+                const div = document.createElement("div")
+                div.setAttribute("style", "max-width: 400px; background-color: var(--background-lighter); border: 1px solid var(--background-lightest); border-radius: var(--border-radius); padding: 10px; display: flex; align-items: center;")
+                div.innerText = friend
+
+                const message_friend_button = document.createElement("button")
+                message_friend_button.setAttribute("style", "margin-left: auto; width: 40px;")
+                message_friend_button.innerHTML = `
+                    <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                        <path d = "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                `
+                // link to friend DMs
+                message_friend_button.addEventListener("click", () => {
+                    window.location.href = `/dms/${friend}`
+                })
+
+                div.appendChild(message_friend_button)
+
+                const remove_friend_button = document.createElement("button")
+                remove_friend_button.setAttribute("class", "danger")
+                remove_friend_button.setAttribute("style", "margin-left: 5px; width: 40px;")
+                remove_friend_button.innerHTML = `
+                    <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                        <path d = "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx = "9" cy = "7" r = "4" />
+                        <line x1 = "17" x2 = "22" y1 = "8" y2 = "13" />
+                        <line x1 = "22" x2 = "17" y1 = "8" y2 = "13" />
+                    </svg>
+                `
+                // removing a friend
+                remove_friend_button.addEventListener("click", async () => {
+                    const res = await fetch_api("/api/remove-friend", { friend })
+
+                    if (res.success) {
+                        window.location.reload()
+                    }
+                })
+
+                div.appendChild(remove_friend_button)
+
+                document.getElementById("friends").appendChild(div)
+            })
+        </script>
         <script src = "/src/actions/onload.js" type = "module"></script>
+        <script src = "/src/actions/add-friend.js" type = "module"></script>
     </body>
 </html>

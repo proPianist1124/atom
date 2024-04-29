@@ -15,9 +15,9 @@
         </svg>
     </button>
     <h2>Create a Server</h2>
+    <hr />
     <form id = "create-server">
-        <input id = "server-name" placeholder = "server name" autocomplete = "off" style = "width: 100%;" />
-        <br><br>
+        <input id = "server-name" placeholder = "server name" autocomplete = "off" style = "margin-bottom: 25px;" />
         <button id = "create-button" type = "submit" style = "width: 100%;">Create</button>
     </form>
     <p id = "error" style = "text-align: center; color: var(--danger);"></p>
@@ -43,10 +43,9 @@
         })
 
         document.getElementById("server-list").appendChild(span)
-    
     })
 </script>
-<script src = "/src/actions/create-server.js"></script>
+<script src = "/src/actions/create-server.js" type = "module"></script>
 
 <style>
     div.server-list {

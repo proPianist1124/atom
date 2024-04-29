@@ -79,26 +79,29 @@
                 </svg>
             </button>
             <h2>Server Settings</h2>
-            <div style = "display: flex; align-items: center; justify-content: center;">
-                <button id = "purge" class = "danger" style = "width: 100%; margin-right: 10px;">
-                    <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
-                        <path d = "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                        <path d = "m14.5 7.5-5 5" />
-                        <path d = "m9.5 7.5 5 5" />
-                    </svg>
-                    &nbsp;<span class = "hide">Purge Messages</span>
-                </button>
-                <button id = "delete" class = "danger" style = "width: 100%;">
-                    <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
-                        <path d = "M3 6h18" />
-                        <path d = "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                        <path d = "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                        <line x1 = "10" x2 = "10" y1 = "11" y2 = "17" />
-                        <line x1 = "14" x2 = "14" y1 = "11" y2 = "17" />
-                    </svg>
-                    &nbsp;<span class = "hide">Delete Server</span>
-                </button>
-            </div>
+            <hr />
+            <p style = "color: var(--danger); font-weight: bold; display: flex; align-items: center;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                &nbsp;Danger Zone
+            </p>
+            <button id = "purge" class = "danger" style = "width: 100%; margin-bottom: 10px;">
+                <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                    <path d = "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    <path d = "m14.5 7.5-5 5" />
+                    <path d = "m9.5 7.5 5 5" />
+                </svg>
+                &nbsp;<span class = "hide">Purge Messages</span>
+            </button>
+            <button id = "delete" class = "danger" style = "width: 100%;">
+                <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                    <path d = "M3 6h18" />
+                    <path d = "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                    <path d = "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                    <line x1 = "10" x2 = "10" y1 = "11" y2 = "17" />
+                    <line x1 = "14" x2 = "14" y1 = "11" y2 = "17" />
+                </svg>
+                &nbsp;<span class = "hide">Delete Server</span>
+            </button>
         </dialog>
         <dialog id = "members">
             <button class = "close" onClick = "document.querySelector('dialog#members').close()">
@@ -117,7 +120,14 @@
                 </svg>
             </button>
             <h2>Invite Link</h2>
-            <input id = "invite-link" value = "https://google.com" style = "width: 100%" disabled />
+            <hr />
+            <div style = "display: flex; align-items: center; justify-content: center;">
+                <input id = "invite-link" style = "width: 100%" />
+                <button id = "copy-invite" style = "margin-left: 5px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                    &nbsp;Copy
+                </button>
+            </div>
         </dialog>
         
         <script type = "module">
@@ -140,7 +150,7 @@
             document.getElementById("purge").addEventListener("click", () => delete_action("purge-msgs"))
 
             async function delete_action(route) {
-                let res = await fetch_api(`/api/${route}`, {
+                const res = await fetch_api(`/api/${route}`, {
                     id: document.getElementById("id").value
                 })
 
@@ -155,43 +165,70 @@
             const members = JSON.parse(`<%- members %>`)
 
             members.forEach((member) => {
-                const a = document.createElement("a")
-                a.setAttribute("href", `/users/${member}`)
-                a.setAttribute("style", "text-decoration: none;")
-
                 const div = document.createElement("div")
-                div.setAttribute("class", "card-secondary")
+                div.setAttribute("class", "member")
                 div.setAttribute("style", "display: flex; align-items: center;")
                 div.innerText = member
 
-                const span = document.createElement("span")
-                span.setAttribute("id", member)
-                span.setAttribute("style", "display: block; margin-left: 5px; font-weight: bold;")
-                span.innerText = "•"
-                div.appendChild(span)
+                const profile_button = document.createElement("button")
+                profile_button.setAttribute("style", "margin-left: auto; width: 40px;")
+                profile_button.innerHTML = `
+                    <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                        <path d = "M15 3h6v6" />
+                        <path d = "M10 14 21 3" />
+                        <path d = "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    </svg>
+                `
+                profile_button.addEventListener("click", () => {
+                    window.location.href = `/users/${member}`
+                })
 
-                a.appendChild(div)
+                const add_button = document.createElement("button")
+                add_button.setAttribute("style", "margin-left: 5px; width: 40px;")
+                add_button.innerHTML = `
+                    <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                        <path d = "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx = "9" cy = "7" r = "4" />
+                        <line x1 = "19" x2 = "19" y1 = "8" y2 = "14" />
+                        <line x1 = "22" x2 = "16" y1 = "11" y2 = "11" />
+                    </svg>
+                `
+
+                const remove_button = document.createElement("button")
+                remove_button.setAttribute("class", "danger")
+                remove_button.setAttribute("style", "margin-left: 5px; width: 40px;")
+                remove_button.innerHTML = `
+                    <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                        <path d = "M18 6 6 18" />
+                        <path d = "m6 6 12 12" />
+                    </svg>
+                `
+                // removing a user from the server
+                remove_button.addEventListener("click", async () => {
+                    const res = await fetch_api("/api/remove-member", {
+                        id: document.getElementById("id").value,
+                        member
+                    })
+                    if (res.success) {
+                        window.location.reload()
+                    } else {
+                        alert(res.error)
+                    }
+                })
+
+                div.appendChild(profile_button)
+                div.appendChild(add_button)
+                div.appendChild(remove_button)
                 
-                document.querySelector("dialog#members").appendChild(a)
-            })
-
-            // check if member has disconnected
-            const socket = io()
-
-            document.addEventListener("visibilitychange", disconnect)
-
-            function disconnect() {
-                if (document.visibilityState !== 'visible') {
-                    socket.emit("status", { status: "offline", sid: getCookie("sid") })
-                }
-            }
-
-            socket.on("status", (user_details) => {
-                document.getElementById(user_details.alias).style.color = user_details.status == "offline" ? "var(--danger)" : "var(--success)"
+                document.querySelector("dialog#members").appendChild(div)
             })
 
             // add an invite link
             document.getElementById("invite-link").value = `${window.location.origin}/server/${document.getElementById("id").value}`
+
+            document.getElementById("copy-invite").addEventListener("click", async () => {
+                await navigator.clipboard.writeText(document.getElementById("invite-link").value)
+            })
         </script>
         <script src = "/src/actions/send-msg.js" type = "module"></script>
         <script src = "/src/actions/leave-server.js" type = "module"></script>

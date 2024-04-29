@@ -9,7 +9,7 @@ async function submit(e){
 
     document.getElementById("auth-button").innerText = document.getElementById("type").value == "login" ? "Logging in..." : "Signing up..."
     
-    let res = await fetch_api(`/api/${document.getElementById("type").value}`, {
+    const res = await fetch_api(`/api/${document.getElementById("type").value}`, {
         alias: String(String(document.getElementById("alias").value).toLowerCase()).replaceAll(" ", ""),
         password:document.getElementById("password").value,
         invite_key: document.getElementById("invite-key") ? document.getElementById("invite-key").value : null

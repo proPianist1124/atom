@@ -9,12 +9,9 @@
             <%- include("./components/header.html"); %>
             <form id = "login" autocomplete = "off" spellcheck = "false">
                 <input value = "signup" id = "type" type = "hidden" />
-                <input type = "text" placeholder = "alias" id = "alias" style = "width: 100%;" />
-                <br><br>
-                <input type = "password" placeholder = "password" id = "password" style = "width: 100%;" />
-                <br><br>
-                <input type = "password" placeholder = "invite key" id = "invite-key" style = "width: 100%;" />
-                <br><br>
+                <input type = "text" placeholder = "alias" id = "alias" />
+                <input type = "password" placeholder = "password" id = "password" />
+                <input type = "password" placeholder = "invite key" id = "invite-key" />
                 <button type = "submit" id = "auth-button" style = "width: 100%;">Sign Up</button>
                 <p id = "error" style = "color: var(--danger);"></p>
             </form>
@@ -25,5 +22,11 @@
         
         <script src = "/src/actions/auth.js" type = "module"></script>
         <script src = "/src/actions/onload.js" type = "module"></script>
+
+        <style>
+            form input {
+                margin-bottom: 25px;
+            }
+        </style>
     </body>
 </html>

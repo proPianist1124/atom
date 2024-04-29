@@ -10,9 +10,7 @@ socket.on(`msg_${document.getElementById("id").value}`, (msg) => {
 })
 
 // send a message to the server
-document.getElementById("send-msg").addEventListener("submit", send_message)
-
-function send_message(e) {
+document.getElementById("send-msg").addEventListener("submit", async (e) => {
     e.preventDefault()
     e.stopImmediatePropagation()
   
@@ -25,4 +23,4 @@ function send_message(e) {
 
         document.getElementById("message").value = ""
     }
-}
+})
