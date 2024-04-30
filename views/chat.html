@@ -81,7 +81,11 @@
             <h2>Server Settings</h2>
             <hr />
             <p style = "color: var(--danger); font-weight: bold; display: flex; align-items: center;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round">
+                    <circle cx = "12" cy = "12" r = "10" />
+                    <line x1 = "12" x2 = "12" y1 = "8" y2 = "12" />
+                    <line x1 = "12" x2 = "12.01" y1 = "16" y2 = "16" />
+                </svg>
                 &nbsp;Danger Zone
             </p>
             <button id = "purge" class = "danger" style = "width: 100%; margin-bottom: 10px;">
@@ -124,8 +128,7 @@
             <div style = "display: flex; align-items: center; justify-content: center;">
                 <input id = "invite-link" style = "width: 100%" />
                 <button id = "copy-invite" style = "margin-left: 5px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                    &nbsp;Copy
+                    Copy
                 </button>
             </div>
         </dialog>
@@ -228,6 +231,7 @@
 
             document.getElementById("copy-invite").addEventListener("click", async () => {
                 await navigator.clipboard.writeText(document.getElementById("invite-link").value)
+                document.getElementById("copy-invite").innerText = "Copied!"
             })
         </script>
         <script src = "/src/actions/send-msg.js" type = "module"></script>
