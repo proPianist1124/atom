@@ -7,23 +7,75 @@
     <body>
         <div class = "card" style = "margin-top: 50px; text-align: center;">
             <%- include("./components/header.html"); %>
-            <form id = "login" autocomplete = "off" spellcheck = "false">
-                <input value = "login" id = "type" type = "hidden" />
-                <input type = "text" placeholder = "alias" id = "alias" />
-                <input type = "password" placeholder = "password" id = "password" />
-                <button type = "submit" id = "auth-button" style = "width: 100%;">
-                    Login
-                </button>
-                <p style = "color: var(--danger);" id = "error"></p>
-            </form>
-            <p>
-                No account? <a href = "?page=signup">Sign Up</a>
-            </p>
+            <div id = "login">
+                <form id = "login" autocomplete = "off" spellcheck = "false">
+                    <input value = "login" id = "type" type = "hidden" />
+                    <input type = "text" placeholder = "alias" id = "alias" />
+                    <input type = "password" placeholder = "password" id = "password" />
+                    <button type = "submit" id = "auth-button" style = "width: 100%;">
+                        Login
+                    </button>
+                    <p style = "color: var(--danger);" id = "error"></p>
+                </form>
+                <p>
+                    No account? <span onclick = "show_signup()" style = "color: var(--secondary); cursor: pointer;">Sign Up</span>
+                </p>
+            </div>
+            <div id = "signup" style = "display: none;">
+                <form id = "login" autocomplete = "off" spellcheck = "false">
+                    <input value = "signup" id = "type" type = "hidden" />
+                    <input type = "text" placeholder = "alias" id = "alias" />
+                    <input type = "password" placeholder = "password" id = "password" />
+                    <input type = "password" placeholder = "invite key" id = "invite-key" />
+                    <button type = "submit" id = "auth-button" style = "width: 100%;">Sign Up</button>
+                    <p id = "error" style = "color: var(--danger);"></p>
+                </form>
+                <p>
+                    Own an account? <span onclick = "show_login()" style = "color: var(--secondary); cursor: pointer;">Login</span>
+                </p>
+            </div>
         </div>
         <%- include("./components/footer.html"); %>
-        
-        <script src = "/src/actions/auth.js" type = "module"></script>
-        <script src = "/src/actions/onload.js" type = "module"></script>
+
+        <script type = "module">
+            import { fetch_api } from "/src/misc/fetch.js";
+            import { createCookie } from "/src/misc/cookies.js";
+
+            document.getElementById("login").addEventListener("submit", async (e) => {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+
+                document.getElementById("auth-button").innerText = document.getElementById("type").value == "login" ? "Logging in..." : "Signing up...";
+    
+                const res = await fetch_api(`/api/${document.getElementById("type").value}`, {
+                    alias: String(String(document.getElementById("alias").value).toLowerCase()).replaceAll(" ", ""),
+                    password:document.getElementById("password").value,
+                    invite_key: document.getElementById("invite-key") ? document.getElementById("invite-key").value : null
+                });
+
+                if (res.error) {
+                    document.getElementById("error").innerText = res.error;
+                    document.getElementById("auth-button").innerText = document.getElementById("type").value == "login" ? "Login" : "Sign Up";
+                } else {
+                    createCookie("sid", res.sid, 24);
+                    createCookie("alias", res.alias, 24);
+
+                    document.getElementById("error").innerText = "";
+                    window.location.href = "/home";
+                }
+            });
+
+            // switching pages
+            function show_signup() {
+                document.querySelector("div#signup").style.display = "block";
+                document.querySelector("div#login").style.display = "none";
+            }
+            function show_login() {
+                document.querySelector("div#signup").style.display = "none";
+                document.querySelector("div#login").style.display = "block";
+            }
+        </script>
+        <script src = "/src/misc/theme.js" type = "module"></script>
 
         <style>
             form input {

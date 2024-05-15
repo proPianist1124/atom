@@ -23,29 +23,47 @@
     <p id = "error" style = "text-align: center; color: var(--danger);"></p>
 </dialog>
 
-<script>    
+<script type = "module">
+    import { fetch_api } from "/src/misc/fetch.js";
+
     JSON.parse(`<%- servers %>`).forEach((server) => {
-        const span = document.createElement("span")
-        span.innerText = server.name[0].toUpperCase()
+        const span = document.createElement("span");
+        span.innerText = server.name[0].toUpperCase();
 
         span.addEventListener("click", () => {
-            window.location.href = `/server/${server.id}`
-        })
+            window.location.href = `/server/${server.id}`;
+        });
 
         span.addEventListener("mouseover", () => {
-            span.style.width = "fit-content"
-            span.innerHTML = `&nbsp;&nbsp;&nbsp;&nbsp;${server.name}&nbsp;&nbsp;&nbsp;&nbsp;`
-        })
+            span.style.width = "fit-content";
+            span.innerHTML = server.name;
+        });
 
         span.addEventListener("mouseout", () => {
-            span.style.width = "30px"
-            span.innerText = server.name[0].toUpperCase()
-        })
+            span.style.width = "30px";
+            span.innerText = server.name[0].toUpperCase();
+        });
 
-        document.getElementById("server-list").appendChild(span)
-    })
+        document.getElementById("server-list").appendChild(span);
+    });
+
+    // create a server
+    document.getElementById("create-server").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        document.getElementById("create-button").innerText = "Creating...";
+
+        const res = await fetch_api("/api/create-server", { name: document.getElementById("server-name").value });
+
+        if (res.error) {
+            document.getElementById("error").innerText = res.error;
+            document.getElementById("create-button").innerText = "Create";
+        } else {
+            window.location.href = `/server/${res.id}`;
+        }
+    });
 </script>
-<script src = "/src/actions/create-server.js" type = "module"></script>
 
 <style>
     div.server-list {
@@ -68,5 +86,7 @@
     }
     div.server-list span:hover {
         background-color: var(--background-lightest);
+        padding-left: 20px;
+        padding-right: 20px;
     }
 </style>

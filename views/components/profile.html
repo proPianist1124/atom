@@ -1,6 +1,8 @@
 <div style = "display: flex; align-items: center; justify-content: center; color: var(--secondary); margin-left: auto; border-radius: var(--border-radius); border: 1px solid var(--background-lighter); padding: 0px 10px;">
     <span id = "profile-letter" style = "border-radius: 50px; width: 20px; height: 20px; padding: 5px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--background-lightest); margin-right: 5px;"></span>
-    <span onClick = "window.location.href = '/users/<%- alias %>'" class = "hide" style = "cursor: pointer;"><%- alias %></span>
+    <span onClick = "window.location.href = '/u/<%- alias %>'" class = "hide" style = "cursor: pointer;">
+        <%- alias %>
+    </span>
     <p style = "color: var(--background-lightest); margin-left: 10px; margin-right: 10px; font-weight: 900;">
         |
     </p>
@@ -14,11 +16,11 @@
 </div>
 
 <script>
-    const alias = "<%- alias %>"
+    const alias = "<%- alias %>";
 
-    document.getElementById("profile-letter").innerText = alias.charAt(0).toUpperCase()
+    document.getElementById("profile-letter").innerText = alias.charAt(0).toUpperCase();
 
     document.getElementById("logout").addEventListener("click", () => {
-        window.location.href = "/logout"
-    })
+        window.location.href = "/logout";
+    });
 </script>

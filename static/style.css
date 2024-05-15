@@ -1,11 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
 :root {
-    --background: #232222;
-    --background-lighter: #2c2a2a;
-    --background-lightest: #353232;
-    --color: #fdf4f4;
-    --secondary: #b6b0b0;
     --primary: #1e90ff;
     --primary-darker: #037ffb;
     --success: #4BB543;
@@ -15,6 +10,22 @@
     --box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     --blur: 1px;
     --font: "Roboto", sans-serif;
+}
+
+.dark-mode {
+    --background: #232222;
+    --background-lighter: #2c2a2a;
+    --background-lightest: #353232;
+    --color: #fdf4f4;
+    --secondary: #b6b0b0;
+}
+
+.light-mode {
+    --background: #fdf4f4;
+    --background-lighter: #f5f5f5;
+    --background-lightest: #ebebeb;
+    --color: #232222;
+    --secondary: #4a4a4a;
 }
 
 ::-webkit-scrollbar {

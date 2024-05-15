@@ -5,8 +5,8 @@ export async function fetch_api(route, body) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(body)
-    })
-    res = await res.json()
+    });
+    res = await res.json();
 
-    return res
+    return res;
 }
